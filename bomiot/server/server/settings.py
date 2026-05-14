@@ -280,12 +280,9 @@ else:
     ]
 
 MEDIA_URL = 'media/'
-if PROJECT_NAME == 'bomiot':
-    MEDIA_ROOT = join(BASE_DIR, 'media').replace('\\', '/')
-else:
-    MEDIA_ROOT = join(join(WORKING_SPACE, PROJECT_NAME), 'media').replace('\\', '/')
-if exists(join(WORKING_SPACE, PROJECT_NAME)):
-    exists(MEDIA_ROOT) or os.makedirs(MEDIA_ROOT)
+# 始终使用 bomiot 包目录下的 media 目录
+MEDIA_ROOT = join(BASE_DIR, 'media').replace('\\', '/')
+exists(MEDIA_ROOT) or os.makedirs(MEDIA_ROOT)
 
 
 # Default primary key field type
