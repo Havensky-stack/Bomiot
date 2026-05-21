@@ -9,6 +9,40 @@
 
 ---
 
+## 一键部署脚本
+
+项目提供了跨平台一键部署脚本，自动完成依赖安装、数据库配置、迁移和前端构建。
+
+**Linux / macOS:**
+
+```bash
+bash scripts/deploy_linux.sh
+```
+
+**Windows:**
+
+```batch
+scripts\deploy_windows.bat
+```
+
+脚本启动后会引导选择数据库类型（SQLite / MySQL）、自动安装依赖、执行数据库迁移、创建管理员账号、构建前端。
+
+---
+
+## 数据库构建脚本
+
+如果使用 MySQL，可先用脚本创建数据库和用户：
+
+```bash
+# 交互式创建数据库和用户
+bash scripts/setup_db.sh
+
+# 或直接执行 SQL
+mariadb -u root -p < scripts/setup_db.sql
+```
+
+---
+
 ## 环境要求
 
 | 依赖 | 版本 |
