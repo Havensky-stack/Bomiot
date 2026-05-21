@@ -162,7 +162,7 @@ def readable_file_size(size_in_bytes) -> str:
 
 
 def compare_dicts(dict1, dict2) -> dict:
-    return {k: (dict1[k], dict2[k]) for k in dict1 if dict1[k] != dict2[k]}
+    return {k: (dict1[k], dict2[k]) for k in dict1 if k in dict2 and dict1[k] != dict2[k]}
 
 
 def queryset_to_dict(queryset) -> list:
