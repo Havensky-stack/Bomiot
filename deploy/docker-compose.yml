@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: wms-web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../dbs:/app/dbs
+      - ../logs:/app/logs
+      - ../awesomewms/templates/dist/spa:/app/awesomewms/templates/dist/spa
+    environment:
+      - DJANGO_SETTINGS_MODULE=bomiot.server.server.settings
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: wms-postgres
+    environment:
+      POSTGRES_DB: wms
+      POSTGRES_USER: wms_user
+      POSTGRES_PASSWORD: wms_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:

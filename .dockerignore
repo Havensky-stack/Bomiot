@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.env
+.venv/
+env/
+venv/
+node_modules/
+.git/
+.gitignore
+dbs/*.sqlite3
+logs/*.log
+*.lock
