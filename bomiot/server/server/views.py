@@ -2,7 +2,7 @@ import json, orjson
 import mimetypes
 import os
 import glob
-import aiofiles
+
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse, FileResponse, StreamingHttpResponse
 from wsgiref.util import FileWrapper
@@ -127,11 +127,7 @@ async def mdurl(request, mddocs):
             if i.startswith(start_words[0]) and i.endswith('.md'):
                 md_check_list_all.append(i)
     if len(md_check_list_only) == 1:
-        async def file_iterator():
-            async with aiofiles.open(join(settings.MEDIA_ROOT, mddocs), 'rb') as f:
-                while chunk := await f.read(8192):
-                    yield chunk
-        response = StreamingHttpResponse(file_iterator())
+        response = FileResponse(open(join(settings.MEDIA_ROOT, mddocs), 'rb'))
         response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         response['Pragma'] = 'no-cache'
         response['Expires'] = '0'
@@ -139,11 +135,7 @@ async def mdurl(request, mddocs):
     else:
         if len(md_check_list_all) == 0:
             return JsonResponse({'detail': others_message_return(language, 'Markdown file not found')})
-        async def file_iterator():
-            async with aiofiles.open(join(settings.MEDIA_ROOT, mddocs), 'rb') as f:
-                while chunk := await f.read(8192):
-                    yield chunk
-        response = StreamingHttpResponse(file_iterator())
+        response = FileResponse(open(join(settings.MEDIA_ROOT, mddocs), 'rb'))
         response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         response['Pragma'] = 'no-cache'
         response['Expires'] = '0'

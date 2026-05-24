@@ -1,5 +1,9 @@
 // app global css in SCSS form
 
+.q-drawer--left {
+  position: fixed !important;
+}
+
 .main-headers-sun {
   background: linear-gradient(to right, #00b4db, #0083b0)
 }
@@ -225,6 +229,7 @@
       line-height: 1.5;
       transition: all 0.3s ease;
       transform-origin: left center;
+      cursor: pointer;
 
       &:hover {
         color: #1976d2;
@@ -282,6 +287,7 @@
       line-height: 1.5;
       transition: all 0.3s ease;
       transform-origin: left center;
+      cursor: pointer;
 
       &:hover {
         color: #1976d2;

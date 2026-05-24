@@ -5,7 +5,8 @@
     <div class="toc-content">
       <div v-for="(item, index) in toc"
             :key="index"
-            :class="['toc-item', `toc-level-${item.level}`]">
+            :class="['toc-item', `toc-level-${item.level}`]"
+            @click="scrollToHeading(item.id)">
         {{ item.text }}
       </div>
     </div>
@@ -13,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, watch, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, watch, ref, nextTick } from 'vue'
 import { useMDDataStore } from "stores/mdDocs"
 import { userightDrawerStore } from "stores/rightDrawer"
 import { get } from 'boot/axios'
@@ -61,12 +62,29 @@ function generateToc(html) {
     const level = parseInt(heading.tagName.charAt(1))
     const text = heading.textContent
     const id = `heading-${index}`
-    heading.id = id
-    heading.style.scrollMarginTop = '80px'
     tocItems.push({ level, text, id })
   })
 
   toc.value = tocItems
+}
+
+function applyHeadingIds() {
+  const container = document.getElementById('markdownData')
+  if (!container) return
+  const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6')
+  headings.forEach((heading, index) => {
+    heading.id = `heading-${index}`
+    heading.style.scrollMarginTop = '80px'
+  })
+}
+
+function scrollToHeading(id) {
+  const el = document.getElementById(id)
+  if (el) {
+    const offset = 110
+    const top = el.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
 }
 
 function MDHtml() {
@@ -124,6 +142,7 @@ function MDHtml() {
     markdownDom.value = ''
     setTimeout(() => {
       markdownDom.value = html
+      nextTick(() => { applyHeadingIds() })
     }, 225)
   } else {
     const md = new MarkdownIt({
@@ -179,6 +198,7 @@ function MDHtml() {
     markdownDom.value = ''
     setTimeout(() => {
       markdownDom.value = html
+      nextTick(() => { applyHeadingIds() })
     }, 225)
   }
 }

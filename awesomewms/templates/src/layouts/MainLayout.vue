@@ -52,7 +52,8 @@
     <q-drawer
       v-model="leftDrawerStore.leftDrawerOpen"
       side="left"
-      :breakpoint="500"
+      persistent
+      :breakpoint="0"
       :class="{'drawer-background-dark text-white': $q.dark.isActive}">
         <q-list padding>
           <MenuLink />

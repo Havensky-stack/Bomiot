@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useleftDrawerStore = defineStore('leftDrawer', {
   state: () => ({
-    leftDrawerMenu: false,
+    leftDrawerMenu: true,
     leftDrawerOpen: true,
   }),
 
