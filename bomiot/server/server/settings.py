@@ -21,9 +21,9 @@ setup_ini_path = join(WORKING_SPACE, 'setup.ini')
 CONFIG.read(setup_ini_path, encoding='utf-8')
 PROJECT_NAME = CONFIG.get('project', 'name', fallback='bomiot')
 
-SECRET_KEY = get_random_secret_key()
+SECRET_KEY = os.environ.get('SECRET_KEY', get_random_secret_key())
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 AUTH_USER_MODEL = "core.User"
@@ -139,6 +139,13 @@ load_dynamic_apps()
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
+]
+try:
+    import whitenoise
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+except ImportError:
+    pass
+MIDDLEWARE += [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -268,6 +275,11 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+try:
+    import whitenoise
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+except ImportError:
+    pass
 if PROJECT_NAME == 'bomiot':
     STATIC_ROOT = join(BASE_DIR, 'bomiot_static').replace('\\', '/')
     STATICFILES_DIRS = [

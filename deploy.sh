@@ -1,36 +1,24 @@
 #!/usr/bin/env bash
 # =============================================
-# WMS Docker One-Click Deploy
-# Usage: bash deploy.sh [up|down|build|logs]
+# Bomiot WMS - One-Click Production Deploy
 # =============================================
-
 set -e
-
 cd "$(dirname "$0")"
 
 case "${1:-up}" in
     up)
-        echo "=== WMS Docker Deploy ==="
-        echo ""
-        echo "Starting services: MySQL + Web"
-        echo "Default login: admin / admin123"
+        echo "=== Bomiot WMS Deploy ==="
+        echo "Starting: MySQL + App (gunicorn) + Nginx"
         echo ""
         docker compose -f deploy/docker-compose.yml up -d --build
         echo ""
         echo "=== Deploy Complete ==="
-        echo "Open: http://localhost:8000"
-        echo "Login: admin / admin123"
-        echo ""
-        echo "View logs:  bash deploy.sh logs"
-        echo "Stop:       bash deploy.sh down"
+        echo "URL:  http://localhost:${PORT:-80}"
+        echo "User: admin / ${ADMIN_PASSWORD:-admin123}"
         ;;
     down)
         docker compose -f deploy/docker-compose.yml down
-        echo "All services stopped."
-        ;;
-    build)
-        docker compose -f deploy/docker-compose.yml build --no-cache
-        echo "Build complete."
+        echo "Stopped."
         ;;
     logs)
         docker compose -f deploy/docker-compose.yml logs -f
@@ -39,6 +27,11 @@ case "${1:-up}" in
         docker compose -f deploy/docker-compose.yml restart web
         ;;
     *)
-        echo "Usage: bash deploy.sh [up|down|build|logs|restart]"
+        echo "Usage: bash deploy.sh [up|down|logs|restart]"
+        echo ""
+        echo "  up       Build and start all services (default)"
+        echo "  down     Stop and remove all services"
+        echo "  logs     View logs from all services"
+        echo "  restart  Restart the web application"
         ;;
 esac

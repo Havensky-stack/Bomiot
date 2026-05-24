@@ -11,7 +11,7 @@ COPY awesomewms/templates/ .
 RUN yarn build
 
 # =============================================
-# Stage 2: Build backend
+# Stage 2: Production backend
 # =============================================
 FROM python:3.11-slim
 
@@ -28,14 +28,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt mysqlclient
+RUN pip install --no-cache-dir -r requirements.txt mysqlclient gunicorn whitenoise
 
 COPY . .
 
-# copy frontend build from stage 1
 COPY --from=frontend-builder /frontend/dist/spa awesomewms/templates/dist/spa
 
-RUN mkdir -p dbs logs
+RUN mkdir -p dbs logs bomiot_static
+
+RUN python bomiot/server/manage.py collectstatic --noinput 2>/dev/null || true
 
 EXPOSE 8000
 

@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "=== WMS Docker Entrypoint ==="
-echo "Database: ${DB_ENGINE:-mysql} @ ${DB_HOST:-db}:${DB_PORT:-3306}"
+echo "=== Bomiot WMS ==="
 
-# generate setup.ini from env vars
+# build setup.ini from env vars
 cat > /app/setup.ini << INIEOF
 [project]
 name = awesomewms
@@ -21,7 +20,7 @@ port = ${DB_PORT:-3306}
 name = templates/dist/spa/index.html
 
 [locale]
-time_zone = 'Asia/Shanghai'
+time_zone = ${TIME_ZONE:-Asia/Shanghai}
 
 [throttle]
 allocation_seconds = 1
@@ -38,41 +37,47 @@ file_size = 104857600
 file_extension = py,png,jpg,jpeg,gif,bmp,webp,txt,md,html,htm,js,css,json,xml,csv,xlsx,xls,ppt,pptx,doc,docx,pdf
 
 [mail]
-email_host = email_host
-email_port = 465
-email_host_user = email_host_user
-email_host_password = email_host_password
-default_from_email = default_from_email
-email_from = email_from
+email_host = ${EMAIL_HOST:-}
+email_port = ${EMAIL_PORT:-465}
+email_host_user = ${EMAIL_HOST_USER:-}
+email_host_password = ${EMAIL_HOST_PASSWORD:-}
+default_from_email = ${DEFAULT_FROM_EMAIL:-}
+email_from = ${EMAIL_FROM:-}
 email_use_ssl = True
 INIEOF
 
 # wait for MySQL
-if [ "$DB_ENGINE" = "mysql" ]; then
-    echo "Waiting for MySQL at $DB_HOST:$DB_PORT..."
+if [ "${DB_ENGINE:-mysql}" = "mysql" ]; then
+    echo "Waiting for MySQL at ${DB_HOST:-db}:${DB_PORT:-3306}..."
     for i in $(seq 1 30); do
-        if mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" --silent 2>/dev/null; then
-            echo "MySQL is ready."
+        if mysqladmin ping -h"${DB_HOST:-db}" -P"${DB_PORT:-3306}" -u"${DB_USER:-root}" -p"${DB_PASSWORD:-root123}" --silent 2>/dev/null; then
+            echo "MySQL ready."
             break
         fi
-        echo "  attempt $i/30 ..."
+        echo "  try $i/30 ..."
         sleep 2
     done
 fi
 
-echo "Running database migrations..."
+echo "Running migrations..."
 python bomiot/server/manage.py migrate --noinput
 
-# create default superuser if none exists
+echo "Collecting static files..."
+python bomiot/server/manage.py collectstatic --noinput 2>/dev/null || true
+
+# create default admin if none exists
 python bomiot/server/manage.py shell -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(is_superuser=True).exists():
-    User.objects.create_superuser('admin', 'admin@wms.com', 'admin123')
-    print('Superuser created: admin / admin123')
+    User.objects.create_superuser('admin', 'admin@wms.com', '${ADMIN_PASSWORD:-admin123}')
+    print('Superuser created: admin / ${ADMIN_PASSWORD:-admin123}')
 else:
     print('Superuser already exists')
 "
 
-echo "=== Starting WMS Server ==="
-exec python bomiot/server/manage.py runserver 0.0.0.0:8000
+echo "=== Starting gunicorn ==="
+exec gunicorn bomiot.server.server.wsgi:application \
+    -c /app/deploy/gunicorn.conf.py \
+    --access-logfile - \
+    --error-logfile -
