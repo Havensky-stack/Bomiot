@@ -50,7 +50,7 @@ const menuLinks = computed(() => [
   { tab: 'wms', title: t('menuLink.customer'), icon: 'group', link: '/customer' },
   { tab: 'wms', title: t('menuLink.purchase'), icon: 'shopping_cart', link: '/purchase' },
   { tab: 'standard', title: t('menuLink.home'), icon: 'home', link: '/' },
-  { tab: 'standard', title: 'README', icon: 'menu_book', link: '/readme' },
+  { tab: 'standard', title: t('menuLink.docs'), icon: 'menu_book', link: '/docs' },
   { tab: 'standard', title: t('menuLink.user'), icon: 'people', link: '/user' },
   { tab: 'standard', title: t('menuLink.team'), icon: 'diversity_3', link: '/team' },
   { tab: 'standard', title: t('menuLink.department'), icon: 'diversity_2', link: '/department' },

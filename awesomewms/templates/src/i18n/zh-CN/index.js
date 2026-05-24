@@ -58,6 +58,7 @@ export default {
     server: '服务器',
   },
   menuLink: {
+    docs: '系统文档',
     home: '首页',
     user: '用户列表',
     team: '用户组',

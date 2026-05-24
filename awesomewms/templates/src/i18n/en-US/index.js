@@ -58,6 +58,7 @@ export default {
     server: 'Server',
   },
   menuLink: {
+    docs: 'Documentation',
     home: 'Home',
     user: 'User List',
     team: 'Team List',

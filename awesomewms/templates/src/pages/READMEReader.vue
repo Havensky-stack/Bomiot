@@ -28,7 +28,7 @@ useMeta(() => {
 
 
 onMounted (() => {
-  mdDataStore.docNameChange('README')
+  mdDataStore.docNameChange('Doc')
 })
 
 
