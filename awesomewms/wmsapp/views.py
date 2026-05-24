@@ -146,3 +146,39 @@ class DNConfirmView(APIView):
                 existing.save()
 
         return Response({'msg': 'DN confirmed and stock updated'})
+
+
+class RecentActivityView(APIView):
+    def get(self, request):
+        limit = int(request.GET.get('limit', 5))
+
+        asns = ASN.objects.filter(is_delete=False).order_by('-created_time')[:limit]
+        dns = DN.objects.filter(is_delete=False).order_by('-created_time')[:limit]
+
+        asn_list = []
+        for a in asns:
+            ad = a.data or {}
+            asn_list.append({
+                'id': a.id,
+                'type': 'asn',
+                'type_label': 'Inbound (ASN)',
+                'code': ad.get('asn_code', ''),
+                'status': ad.get('status', 'pending'),
+                'time': a.created_time.strftime('%Y-%m-%d %H:%M'),
+            })
+
+        dn_list = []
+        for d in dns:
+            dd = d.data or {}
+            dn_list.append({
+                'id': d.id,
+                'type': 'dn',
+                'type_label': 'Outbound (DN)',
+                'code': dd.get('dn_code', ''),
+                'status': dd.get('status', 'pending'),
+                'time': d.created_time.strftime('%Y-%m-%d %H:%M'),
+            })
+
+        combined = sorted(asn_list + dn_list, key=lambda x: x['time'], reverse=True)[:limit]
+
+        return Response({'recent': combined})

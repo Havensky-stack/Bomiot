@@ -187,6 +187,15 @@ export default {
   503: 'Service unavailable (503)',
   504: 'Network timeout (504)',
   505: 'HTTP version is not supported (505)',
+  home: {
+    welcomeBack: 'Welcome Back',
+    systemOverview: 'System Overview',
+    quickActions: 'Quick Actions',
+    recentActivity: 'Recent Activity',
+    noRecent: 'No recent activities',
+    lowStockWarning: 'item(s) below stock threshold of 10, please restock soon',
+    goDashboard: 'Go to Dashboard',
+  },
   wms: {
     goodsName: 'Goods Name',
     goodsCode: 'Goods Code',

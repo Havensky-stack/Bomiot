@@ -1,331 +1,348 @@
 <div align="center">
   <img src="media/img/logo.png" alt="awesomewms logo" width="200" height="auto" />
-  <h1>awesomewms - Warehouse Management System</h1>
-  <p><strong>Full-Stack Warehouse Management System based on Bomiot Framework</strong></p>
-
-![Python](https://img.shields.io/badge/Python-3.9+-yellowgreen)
-![Django](https://img.shields.io/badge/Django-4.2+-yellowgreen)
-![Quasar](https://img.shields.io/badge/Quasar-2.18+-yellowgreen)
-![Vue](https://img.shields.io/badge/Vue-3.4+-yellowgreen)
-![License](https://img.shields.io/badge/License-APLv2-blue)
-
+  <h1>awesomewms - User Manual</h1>
+  <p><strong>Full-Stack Warehouse Management System</strong></p>
 </div>
 
 ---
 
-## System Overview
+## 1. Login & First Access
 
-awesomewms is a full-stack Warehouse Management System (WMS) built on the Bomiot framework. It provides complete inbound/outbound management, inventory tracking, basic data management, and system monitoring capabilities. The system supports multi-user role-based access control with fine-grained API-level permissions.
+### Default Account
 
-### Tech Stack
+| Field | Value |
+|-------|-------|
+| URL | `http://127.0.0.1:8000/` |
+| Username | `admin` |
+| Password | `admin123` |
 
-| Layer | Technology |
-|-------|-----------|
-| Backend Framework | Django 4.2+ |
-| API | Django REST Framework |
-| Frontend Framework | Quasar v2 + Vue 3.4 |
-| Database | SQLite / MySQL / PostgreSQL |
-| Authentication | JWT Token |
-| Monitoring | psutil (CPU, Memory, Disk, Network) |
-| Charts | ECharts 5 |
+The `admin` account is a superuser with unrestricted access to all features.
 
----
+### Login Steps
 
-## Core Features
+1. Open your browser and navigate to `http://127.0.0.1:8000/`
+2. Enter your username and password on the login page
+3. Click the **Login** button — you will be redirected to the homepage
 
-### Warehouse Management
+### What You See After Login
 
-| Module | Description |
-|--------|-------------|
-| **Goods Management** | Product/item master data (code, name, spec, unit, price) |
-| **Bin Management** | Storage location management (code, name, type, capacity) |
-| **Stock Management** | Real-time inventory tracking with stock level alerts |
-| **Supplier Management** | Supplier contact information and address management |
-| **Customer Management** | Customer contact information and address management |
-
-### Inbound / Outbound Operations
-
-| Module | Description |
-|--------|-------------|
-| **ASN (Advanced Shipping Notice)** | Inbound order management with status tracking |
-| **ASN Detail** | Line-item details for inbound orders |
-| **DN (Delivery Note)** | Outbound order management with status tracking |
-| **DN Detail** | Line-item details for outbound orders |
-| **Purchase Orders** | Purchase order management linking suppliers and goods |
-
-### Business Flow
-
-```
-[Create Supplier] → [Create Goods] → [Create Bin]
-                                          ↓
-[Create ASN] → [Create ASN Detail] → [Confirm ASN] → [Stock Updated ↑]
-[Create DN] → [Create DN Detail] → [Confirm DN] → [Stock Updated ↓]
-```
-
-- **ASN Confirm**: When confirmed, stock quantities are automatically increased in the specified bins
-- **DN Confirm**: When confirmed, stock quantities are automatically decreased from the specified bins
-- **Low Stock Alert**: Dashboard displays all items with quantity below 10 units
+The homepage shows:
+- **System Overview**: KPI cards displaying total goods, bins, stock items, suppliers, customers, and weekly inbound/outbound counts
+- **Quick Actions**: A grid of shortcut cards to jump directly to any WMS module
+- **Recent Activity**: A live timeline of the latest ASN/DN transactions
+- **Dashboard Preview**: Today's inbound/outbound summary with a link to the full dashboard
 
 ---
 
-## User Management & Permissions
+## 2. Setting Up Base Data
+
+Before creating any warehouse transactions, configure your base data in this order:
+
+### Step 1 — Create Suppliers
+
+1. Click **Supplier** from the quick actions or the left sidebar menu
+2. Click the **New** button (top-right corner)
+3. Fill in the form:
+   - **Supplier Name**: e.g. "ABC Electronics Ltd."
+   - **Contact**: e.g. "John Smith"
+   - **Phone**: e.g. "123-456-7890"
+   - **Address**: e.g. "123 Industrial Rd, Shanghai"
+4. Click **Submit**
+
+### Step 2 — Create Customers
+
+1. Click **Customer** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in customer contact details (same fields as Supplier)
+4. Click **Submit**
+
+### Step 3 — Create Goods (Products)
+
+1. Click **Goods** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **Goods Name**: e.g. "Widget A — 10mm"
+   - **Goods Code**: e.g. "WGT-001" (unique identifier)
+   - **Specification**: e.g. "10mm x 50mm, stainless steel"
+   - **Unit**: e.g. "pcs", "kg", "box"
+   - **Price**: Unit price (decimal)
+   - **Description**: Optional notes
+4. Click **Submit**
+
+### Step 4 — Create Bins (Storage Locations)
+
+1. Click **Bin** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **Bin Code**: e.g. "A-01-01" (unique location code)
+   - **Bin Name**: e.g. "Shelf A, Row 1, Level 1"
+   - **Bin Type**: e.g. "shelf", "pallet", "floor"
+   - **Capacity**: Maximum quantity this location can hold
+4. Click **Submit**
+
+> **Tip**: Use the search box on any list page to filter by keyword. Data refreshes automatically when you switch between pages.
+
+---
+
+## 3. Inbound Operations (ASN)
+
+### Create an Inbound Order
+
+1. Click **ASN** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **ASN Code**: e.g. "ASN-2026-001" (your inbound order number)
+   - **ASN Type**: e.g. "purchase_receipt", "return", "transfer"
+   - **Expected Time**: Expected arrival date/time
+   - **Status**: Leave as **pending** (will change after confirmation)
+4. Click **Submit**
+
+### Add Inbound Details (Line Items)
+
+1. Click **ASN Detail** in the sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **ASN ID**: Select the inbound order you just created (use the ID number)
+   - **Goods ID**: Select the product being received
+   - **Bin ID**: Select the storage location where goods will be placed
+   - **Quantity**: Number of units received
+   - **Batch No**: (Optional) batch/lot number for traceability
+4. Click **Submit**
+5. Repeat for each product line in the order
+
+### Confirm Receipt (Updates Stock)
+
+1. Go to **ASN** list page
+2. Find the ASN you want to confirm
+3. Click the **Confirm** button (checkmark icon)
+4. The system automatically:
+   - Updates stock quantities in the specified bins
+   - Creates new stock records if none exist
+   - Changes the ASN status to **confirmed**
+
+> **Important**: Stock quantities increase automatically upon ASN confirmation. Make sure your line items are correct before confirming.
+
+---
+
+## 4. Outbound Operations (DN)
+
+### Create an Outbound Order
+
+1. Click **DN** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **DN Code**: e.g. "DN-2026-001" (your outbound order number)
+   - **DN Type**: e.g. "sales_delivery", "transfer_out", "return_to_supplier"
+   - **Expected Time**: Expected shipment date/time
+   - **Status**: Leave as **pending**
+4. Click **Submit**
+
+### Add Outbound Details (Line Items)
+
+1. Click **DN Detail** in the sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **DN ID**: Select the outbound order you just created
+   - **Goods ID**: Select the product being shipped
+   - **Bin ID**: Select the storage location to pick from
+   - **Quantity**: Number of units to ship
+4. Click **Submit**
+
+### Confirm Shipment (Updates Stock)
+
+1. Go to **DN** list page
+2. Find the DN you want to confirm
+3. Click the **Confirm** button
+4. The system automatically:
+   - Deducts stock from the specified bins
+   - Changes the DN status to **confirmed**
+
+> **Important**: If you try to ship more than the available stock, the system will deduct to zero but not go negative.
+
+---
+
+## 5. Checking Inventory
+
+### View Stock
+
+1. Click **Stock** from the quick actions or sidebar menu
+2. The stock list shows all inventory records with:
+   - Goods name and bin location
+   - Current quantity
+   - Which ASN originally created the stock
+
+### Low Stock Warning
+
+- The dashboard and homepage automatically show a **Low Stock Alert** for any item with quantity **below 10 units**
+- The warning banner appears at the top of the homepage with a count of affected items
+- Click the warning to view the full list on the dashboard
+
+### Stock Movements
+
+Every stock change is triggered by an ASN or DN confirmation. There is no manual stock adjustment — all inventory changes must go through an inbound or outbound order.
+
+---
+
+## 6. Purchase Orders
+
+Purchase orders link suppliers and goods.
+
+1. Click **Purchase** from the quick actions or sidebar menu
+2. Click the **New** button
+3. Fill in the form:
+   - **Purchase Code**: e.g. "PO-2026-001"
+   - Select the **Supplier** and **Goods**
+   - Enter quantity and any notes
+4. Click **Submit**
+
+---
+
+## 7. User & Permission Management
 
 ### Permission Model
 
 ```
-API List → Permission Entries → Team (grant permissions) → User (join team, inherit permissions)
+API Endpoint → Permission Entry → Team (granted permissions) → User (joins team, inherits permissions)
 ```
 
-1. **Create Permissions**: Permissions are defined in the database linking API endpoints to permission names
-2. **Create Teams**: Assign permission sets to teams
-3. **Create Users**: Users are created by administrators (default password = username)
-4. **Assign Teams**: Users inherit all permissions from their team
-5. **Re-login Required**: Permission changes take effect after re-login (JWT-based)
+Permissions are API-level — each CRUD operation on every entity requires a specific permission.
 
-### Default Admin Account
+### Creating a Team with Permissions
 
-- Username: `admin`
-- Password: `admin123`
-- Superuser with all permissions bypass
+1. Click **Team** in the sidebar menu (under Standard tab)
+2. Click **New Team** → enter a team name → **Submit**
+3. Find the new team in the list, click the **shield/lock** icon for **Set Permission**
+4. In the dialog, check all permissions this team should have. Common groupings:
+   - **Warehouse operators**: ASN, ASN Detail, DN, DN Detail (create, update)
+   - **Inventory managers**: Goods, Bin, Stock (all CRUD)
+   - **View-only users**: Any entity with just "list" permission
+5. Click **Submit**
 
-### Available Permission Categories
+### Creating a User and Assigning to Team
 
-- **User Management**: Create user, change password, set team, lock/unlock, delete
-- **Team Management**: Create team, set permissions, modify, delete
-- **Department Management**: Create, modify, delete departments
-- **WMS Entities**: CRUD permissions for Goods, Bin, Stock, Supplier, Customer, ASN, DN, Purchase
+1. Click **User** in the sidebar menu
+2. Click **New User** → enter a username → **Submit** (default password = username)
+3. Find the new user → click the **team** icon → select a team → **Submit**
+4. Optionally set a **Department** and **change password**
+5. The user must **log out and log back in** for permission changes to take effect (JWT-based)
 
----
+### Locking / Unlocking Users
 
-## System Monitoring
+- Click the **lock/unlock** icon on the user list to prevent a user from logging in
+- Locked users cannot access the system
 
-The system includes built-in server monitoring (requires `IS_LAN=true` environment variable):
+### Pre-configured Permissions
 
-| Monitor | Description |
-|---------|-------------|
-| **CPU** | Real-time CPU usage tracking with timeline charts |
-| **Memory** | Used/free memory tracking with timeline charts |
-| **Disk** | Per-partition disk usage statistics |
-| **Network** | Bytes sent/received tracking with timeline charts |
-| **PID** | Process-level memory usage tracking |
-| **PID Tree** | Process memory usage treemap visualization |
-
----
-
-## Navigation Structure
-
-### WMS Tab
-- **Dashboard** - KPI cards + inbound/outbound charts + low stock alerts
-- **Goods** - Product master data CRUD
-- **Bin** - Storage location CRUD
-- **Stock** - Inventory view
-- **ASN** - Inbound orders with confirm action
-- **ASN Detail** - Inbound line items
-- **DN** - Outbound orders with confirm action
-- **DN Detail** - Outbound line items
-- **Supplier** - Supplier CRUD
-- **Customer** - Customer CRUD
-- **Purchase** - Purchase order CRUD
-
-### Standard Tab
-- **Home** - Welcome page
-- **README** - System documentation
-- **User** - User management
-- **Team** - Team and permission management
-- **Department** - Department management
-- **Upload** - File upload center
-- **Doc** - Document center
-
-### Server Tab (IS_LAN)
-- PID, CPU, Memory, Disk, Network monitoring
-- DashBoard, PID Tree charts
+| Category | Permissions Available |
+|----------|----------------------|
+| User Management | Create, Change Password, Set Team, Set Department, Lock/Unlock, Delete |
+| Team Management | Create, Change, Set Permission, Delete |
+| Department Management | Create, Change, Delete |
+| Goods | Create, Update, Delete, List |
+| Bin | Create, Update, Delete, List |
+| Stock | Create, Update, Delete, List |
+| Supplier | Create, Update, Delete, List |
+| Customer | Create, Update, Delete, List |
+| ASN | Create, Update, Delete, List |
+| ASN Detail | Create, Update, Delete, List |
+| DN | Create, Update, Delete, List |
+| DN Detail | Create, Update, Delete, List |
+| Purchase | Create, Update, Delete, List |
 
 ---
 
-## API Reference
+## 8. Search & Pagination
 
-All API endpoints are prefixed with `/core/` except dashboard endpoints which use `/wmsapp/`.
+### Searching Data
 
-### Authentication
+- Every list page has a **search input** on top of the table
+- Type a keyword and press **Enter** — the system searches across all text fields of that entity
+- Clear the search box and press **Enter** to reset
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/login/` | Login, returns JWT token |
-| POST | `/logout/` | Logout |
-| GET | `/checktoken/` | Check token validity |
+### Pagination
 
-### WMS Entities
-
-| Entity | List | Create | Update | Delete |
-|--------|------|--------|--------|--------|
-| Goods | GET `/core/goods/` | POST `/core/goods/create/` | POST `/core/goods/update/` | POST `/core/goods/delete/` |
-| Bin | GET `/core/bin/` | POST `/core/bin/create/` | POST `/core/bin/update/` | POST `/core/bin/delete/` |
-| Stock | GET `/core/stock/` | POST `/core/stock/create/` | POST `/core/stock/update/` | POST `/core/stock/delete/` |
-| Supplier | GET `/core/supplier/` | POST `/core/supplier/create/` | POST `/core/supplier/update/` | POST `/core/supplier/delete/` |
-| Customer | GET `/core/customer/` | POST `/core/customer/create/` | POST `/core/customer/update/` | POST `/core/customer/delete/` |
-| ASN | GET `/core/asn/` | POST `/core/asn/create/` | POST `/core/asn/update/` | POST `/core/asn/delete/` |
-| ASN Detail | GET `/core/asn/detail/` | POST `/core/asn/detail/create/` | POST `/core/asn/detail/update/` | POST `/core/asn/detail/delete/` |
-| DN | GET `/core/dn/` | POST `/core/dn/create/` | POST `/core/dn/update/` | POST `/core/dn/delete/` |
-| DN Detail | GET `/core/dn/detail/` | POST `/core/dn/detail/create/` | POST `/core/dn/detail/update/` | POST `/core/dn/detail/delete/` |
-| Purchase | GET `/core/purchase/` | POST `/core/purchase/create/` | POST `/core/purchase/update/` | POST `/core/purchase/delete/` |
-
-### WMS Business Operations
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/wmsapp/dashboard/` | Get dashboard KPIs |
-| POST | `/wmsapp/asn/confirm/` | Confirm ASN receipt (updates stock) |
-| POST | `/wmsapp/dn/confirm/` | Confirm DN shipment (updates stock) |
-
-### User Management
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/core/user/` | List users |
-| POST | `/core/user/create/` | Create user |
-| POST | `/core/user/changepwd/` | Change password |
-| POST | `/core/user/team/` | Set user team |
-| POST | `/core/user/department/` | Set user department |
-| POST | `/core/user/lock/` | Lock/unlock user |
-| POST | `/core/user/delete/` | Delete user |
-| GET | `/core/user/permission/` | List all permissions |
-
-### Team Management
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/core/team/` | List teams |
-| POST | `/core/team/create/` | Create team |
-| POST | `/core/team/setpermission/` | Set team permissions |
-| POST | `/core/team/change/` | Rename team |
-| POST | `/core/team/delete/` | Delete team |
-
-### Common Parameters
-
-- **Pagination**: `?page=1&max_page=30`
-- **Search**: `?params={"data__fieldname__icontains":"keyword"}`
-- **Auth Header**: `token: <JWT_TOKEN>`
+- Use the **pagination controls** at the bottom of each table
+- Adjust **rows per page** to see more or fewer records
+- The total count is displayed in the pagination bar
 
 ---
 
-## Deployment
+## 9. Editing & Deleting Data
 
-### Prerequisites
+### Edit a Record
 
-- Python 3.9+
-- Node.js 18.19+ (for frontend build only)
-- SQLite (default) or MySQL/PostgreSQL
+1. Click the **pencil/edit** icon on any row
+2. Modify the fields in the dialog that appears
+3. Click **Submit** to save changes
 
-### Quick Start
+### Delete a Record
 
+1. Click the **trash/delete** icon on any row
+2. A confirmation dialog appears — **this action cannot be undone**
+3. Click **Submit** to permanently delete the record
+
+> **Important**: The system uses soft-delete internally, but deleted records are hidden from the UI. Contact your administrator if you need to recover deleted data.
+
+---
+
+## 10. System Monitoring (IS_LAN Mode)
+
+When the server is started with `IS_LAN=true`, additional monitoring pages become available under the **Server** tab:
+
+| Page | What It Shows |
+|------|---------------|
+| CPU | Real-time CPU usage with historical timeline chart |
+| Memory | Used/free memory and swap usage with timeline |
+| Disk | Disk usage by partition |
+| Network | Bytes sent/received tracking with timeline |
+| PID | Process-level memory and CPU usage |
+| PID Tree | Treemap visualization of process memory usage |
+| Dashboard | Combined server health overview |
+
+---
+
+## 11. Keyboard Shortcuts & Tips
+
+- **Enter**: Submit search on list pages
+- **Esc**: Close any open dialog
+- The sidebar menu collapses automatically on smaller screens — use the hamburger icon to toggle
+- Toggle **dark mode** via the theme button in the header toolbar
+- Switch languages (**EN / 中文**) via the globe icon in the header toolbar
+
+---
+
+## 12. FAQ
+
+### Q: I can't see some menu items after logging in?
+**A**: Your user account may not have the required permissions. Ask your administrator to assign your team the necessary permissions, then log out and log back in.
+
+### Q: Why is the low stock alert flagging items even though I just received them?
+**A**: The threshold is hard-coded at **10 units**. Stock below this count triggers the alert. Confirm your ASN to increase stock levels.
+
+### Q: Can I adjust stock manually without creating an ASN or DN?
+**A**: No. All stock changes must go through ASN (inbound) or DN (outbound) confirmations. This ensures full audit traceability.
+
+### Q: How do I reset the admin password?
+**A**: Run this command on the server:
 ```bash
-# 1. Clone and enter project
-cd Bomiot/awesomewms
-
-# 2. Create conda environment
-conda create -n wms python=3.11 -y && conda activate wms
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Initialize database
-cd ../ && PYTHONPATH=. python bomiot/server/manage.py migrate
-
-# 5. Seed permissions and API data
-PYTHONPATH=. python seed_api.py
-PYTHONPATH=. python seed_permissions.py
-
-# 6. Create admin user (via Django shell)
 PYTHONPATH=. python bomiot/server/manage.py shell -c "
 from django.contrib.auth import get_user_model
-u = get_user_model().objects.create_superuser('admin', 'admin@wms.com', 'admin123')
+u = get_user_model().objects.get(username='admin')
+u.set_password('newpassword')
+u.save()
 "
-
-# 7. Build frontend
-cd awesomewms/templates && npm install && npm run build
-
-# 8. Start server (with monitoring)
-cd ../../
-IS_LAN=true PYTHONPATH=. python bomiot/server/manage.py runserver 0.0.0.0:8000
-
-# 9. Access system
-# Open http://127.0.0.1:8000/
-# Login: admin / admin123
 ```
 
-### Docker Deployment
-
-```bash
-cd deploy
-docker-compose up -d
-```
-
-### Configuration
-
-Edit `awesomewms/setup.ini`:
+### Q: Can I connect to MySQL or PostgreSQL instead of SQLite?
+**A**: Yes. Edit `awesomewms/setup.ini` and change the `[database]` section:
 ```ini
-[project]
-name = awesomewms
-
 [database]
-engine = sqlite          # or mysql, postgresql, oracle
-name = db_name
-user = db_user
-password = db_pwd
-host = db_host
-port = db_port
-
-[jwt]
-user_jwt_time = 1000000
-
-[request]
-limit = 5                # Max failed login attempts before lockout
-
-[file]
-file_size = 102400000    # Max upload size in bytes
-```
-
----
-
-## Project Structure
-
-```
-Bomiot/
-├── awesomewms/                    # WMS project
-│   ├── language/                  # i18n files (en-US.toml, zh-CN.toml)
-│   ├── media/                     # Static assets and markdown docs
-│   ├── templates/                 # Frontend (Quasar/Vue 3)
-│   │   └── src/
-│   │       ├── boot/              # Axios config, event bus
-│   │       ├── components/        # Reusable components
-│   │       │   ├── echarts/       # Chart components
-│   │       │   ├── md/            # Markdown renderer
-│   │       │   ├── user/          # User/Team/Department list components
-│   │       │   └── wms/           # WMS CRUD table component
-│   │       ├── i18n/              # Frontend translations
-│   │       ├── layouts/           # Main layout with header/menu
-│   │       ├── pages/             # Page components (one per route)
-│   │       ├── router/            # Vue Router config
-│   │       └── stores/            # Pinia stores
-│   ├── wmsapp/                    # WMS backend app
-│   │   ├── views.py               # Dashboard, ASN/DN confirm views
-│   │   └── urls.py                # WMS-specific routes
-│   ├── bomiotconf.ini             # Project identifier
-│   ├── receiver.py                # Data signal handlers
-│   └── setup.ini                  # Project configuration
-├── bomiot/server/                 # Bomiot framework core
-│   └── core/
-│       ├── models.py              # All database models
-│       ├── views.py               # User/Team/Department views
-│       ├── urls.py                # Core URL routing
-│       ├── function/              # WMS entity handlers
-│       ├── client.py              # Server monitoring endpoints
-│       ├── page.py                # Pagination classes
-│       ├── jwt_auth.py            # JWT authentication
-│       └── auth.py                # Custom authentication backend
-├── seed_api.py                    # API table seed script
-├── seed_permissions.py            # Permission table seed script
-└── deploy/                        # Docker and deployment configs
+engine = mysql
+name = your_db_name
+user = your_db_user
+password = your_db_password
+host = 127.0.0.1
+port = 3306
 ```
 
 ---

@@ -187,6 +187,15 @@ export default {
   503: '服务不可用(503)',
   504: '网络超时(504)',
   505: 'HTTP版本不受支持(505)',
+  home: {
+    welcomeBack: '欢迎回来',
+    systemOverview: '系统概览',
+    quickActions: '快捷操作',
+    recentActivity: '最近动态',
+    noRecent: '暂无业务活动',
+    lowStockWarning: '个商品库存不足 10，请及时补货',
+    goDashboard: '进入仪表板',
+  },
   wms: {
     goodsName: '商品名称',
     goodsCode: '商品编码',
