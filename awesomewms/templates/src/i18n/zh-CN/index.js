@@ -4,7 +4,7 @@
 export default {
   failed: '失败',
   success: '成功',
-  title: 'Bomiot',
+  title: 'awesomewms',
   description: 'GreaterWMS开源仓库管理系统',
   keywords: 'greaterwms, 聚商汇wms,wms-system,open source wms system,开源wms,开源仓库管理软件,warehouse management system, free wms',
   expireNotice: `授权Key将在{days}天内到期，请使用'bomiot keys'重新获取授权key`,

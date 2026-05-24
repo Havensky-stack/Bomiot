@@ -38,6 +38,20 @@ class User(AbstractUser, CoreModel):
         ordering = ['-id']
 
 
+class API(CoreModel):
+    id = models.AutoField(primary_key=True, serialize=False)
+    method = models.CharField(max_length=18, default='GET', verbose_name="Method")
+    api = models.CharField(max_length=255, verbose_name="API API")
+    func_name = models.CharField(max_length=255, verbose_name="API Name")
+    name = models.CharField(max_length=255, default='', verbose_name="API Description")
+
+    class Meta:
+        db_table = settings.BASE_DB_TABLE + '_api'
+        verbose_name = settings.BASE_DB_TABLE + ' API'
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+
 class Permission(CoreModel):
     api = models.CharField(max_length=255, verbose_name="Permission API")
     name = models.CharField(max_length=255, verbose_name="Permission Name")

@@ -19,6 +19,8 @@ from bomiot.server.function import driver
 
 
 urlpatterns = [
+    path(r'api/', views.APIList.as_view({"get": "list"}), name="Get API List"),
+    path(r'api/change/', views.APIChange.as_view({"post": "create"}), name="Change API Func Name"),
     path(r'user/', views.UserList.as_view({"get": "list"}), name="Get User List"),
     path(r'user/permission/', views.PermissionList.as_view({"get": "list"})),
     path(r'user/create/', views.UserCreate.as_view({"post": "create"}), name="Create One User"),

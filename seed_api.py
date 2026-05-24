@@ -1,0 +1,76 @@
+import os, sys
+
+project_root = '/home/havensky/code/SoftwareEngineeringFinalProject/Bomiot'
+sys.path.insert(0, project_root)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'bomiot.server.server.settings'
+os.environ['PROJECT_NAME'] = 'awesomewms'
+os.environ['DATABASE_TYPE'] = 'sqlite'
+
+import django
+django.setup()
+
+from bomiot.server.core.models import API
+
+entries = [
+    {'method': 'GET', 'api': '/core/goods/', 'func_name': 'goods_get', 'name': 'Get Goods List'},
+    {'method': 'POST', 'api': '/core/goods/create/', 'func_name': 'goods_create', 'name': 'Create Goods'},
+    {'method': 'POST', 'api': '/core/goods/update/', 'func_name': 'goods_update', 'name': 'Update Goods'},
+    {'method': 'POST', 'api': '/core/goods/delete/', 'func_name': 'goods_delete', 'name': 'Delete Goods'},
+    {'method': 'GET', 'api': '/core/bin/', 'func_name': 'bin_get', 'name': 'Get Bin List'},
+    {'method': 'POST', 'api': '/core/bin/create/', 'func_name': 'bin_create', 'name': 'Create Bin'},
+    {'method': 'POST', 'api': '/core/bin/update/', 'func_name': 'bin_update', 'name': 'Update Bin'},
+    {'method': 'POST', 'api': '/core/bin/delete/', 'func_name': 'bin_delete', 'name': 'Delete Bin'},
+    {'method': 'GET', 'api': '/core/stock/', 'func_name': 'stock_get', 'name': 'Get Stock List'},
+    {'method': 'POST', 'api': '/core/stock/create/', 'func_name': 'stock_create', 'name': 'Create Stock'},
+    {'method': 'POST', 'api': '/core/stock/update/', 'func_name': 'stock_update', 'name': 'Update Stock'},
+    {'method': 'POST', 'api': '/core/stock/delete/', 'func_name': 'stock_delete', 'name': 'Delete Stock'},
+    {'method': 'GET', 'api': '/core/supplier/', 'func_name': 'supplier_get', 'name': 'Get Supplier List'},
+    {'method': 'POST', 'api': '/core/supplier/create/', 'func_name': 'supplier_create', 'name': 'Create Supplier'},
+    {'method': 'POST', 'api': '/core/supplier/update/', 'func_name': 'supplier_update', 'name': 'Update Supplier'},
+    {'method': 'POST', 'api': '/core/supplier/delete/', 'func_name': 'supplier_delete', 'name': 'Delete Supplier'},
+    {'method': 'GET', 'api': '/core/customer/', 'func_name': 'customer_get', 'name': 'Get Customer List'},
+    {'method': 'POST', 'api': '/core/customer/create/', 'func_name': 'customer_create', 'name': 'Create Customer'},
+    {'method': 'POST', 'api': '/core/customer/update/', 'func_name': 'customer_update', 'name': 'Update Customer'},
+    {'method': 'POST', 'api': '/core/customer/delete/', 'func_name': 'customer_delete', 'name': 'Delete Customer'},
+    {'method': 'GET', 'api': '/core/asn/', 'func_name': 'asn_get', 'name': 'Get ASN List'},
+    {'method': 'POST', 'api': '/core/asn/create/', 'func_name': 'asn_create', 'name': 'Create ASN'},
+    {'method': 'POST', 'api': '/core/asn/update/', 'func_name': 'asn_update', 'name': 'Update ASN'},
+    {'method': 'POST', 'api': '/core/asn/delete/', 'func_name': 'asn_delete', 'name': 'Delete ASN'},
+    {'method': 'GET', 'api': '/core/asn/detail/', 'func_name': 'asn_detail_get', 'name': 'Get ASN Detail'},
+    {'method': 'POST', 'api': '/core/asn/detail/create/', 'func_name': 'asn_detail_create', 'name': 'Create ASN Detail'},
+    {'method': 'POST', 'api': '/core/asn/detail/update/', 'func_name': 'asn_detail_update', 'name': 'Update ASN Detail'},
+    {'method': 'POST', 'api': '/core/asn/detail/delete/', 'func_name': 'asn_detail_delete', 'name': 'Delete ASN Detail'},
+    {'method': 'GET', 'api': '/core/dn/', 'func_name': 'dn_get', 'name': 'Get DN List'},
+    {'method': 'POST', 'api': '/core/dn/create/', 'func_name': 'dn_create', 'name': 'Create DN'},
+    {'method': 'POST', 'api': '/core/dn/update/', 'func_name': 'dn_update', 'name': 'Update DN'},
+    {'method': 'POST', 'api': '/core/dn/delete/', 'func_name': 'dn_delete', 'name': 'Delete DN'},
+    {'method': 'GET', 'api': '/core/dn/detail/', 'func_name': 'dn_detail_get', 'name': 'Get DN Detail'},
+    {'method': 'POST', 'api': '/core/dn/detail/create/', 'func_name': 'dn_detail_create', 'name': 'Create DN Detail'},
+    {'method': 'POST', 'api': '/core/dn/detail/update/', 'func_name': 'dn_detail_update', 'name': 'Update DN Detail'},
+    {'method': 'POST', 'api': '/core/dn/detail/delete/', 'func_name': 'dn_detail_delete', 'name': 'Delete DN Detail'},
+    {'method': 'GET', 'api': '/core/purchase/', 'func_name': 'purchase_get', 'name': 'Get Purchase List'},
+    {'method': 'POST', 'api': '/core/purchase/create/', 'func_name': 'purchase_create', 'name': 'Create Purchase'},
+    {'method': 'POST', 'api': '/core/purchase/update/', 'func_name': 'purchase_update', 'name': 'Update Purchase'},
+    {'method': 'POST', 'api': '/core/purchase/delete/', 'func_name': 'purchase_delete', 'name': 'Delete Purchase'},
+    {'method': 'GET', 'api': '/core/bar/', 'func_name': 'bar_get', 'name': 'Get Bar List'},
+    {'method': 'POST', 'api': '/core/bar/create/', 'func_name': 'bar_create', 'name': 'Create Bar'},
+    {'method': 'POST', 'api': '/core/bar/update/', 'func_name': 'bar_update', 'name': 'Update Bar'},
+    {'method': 'POST', 'api': '/core/bar/delete/', 'func_name': 'bar_delete', 'name': 'Delete Bar'},
+    {'method': 'GET', 'api': '/core/fee/', 'func_name': 'fee_get', 'name': 'Get Fee List'},
+    {'method': 'POST', 'api': '/core/fee/create/', 'func_name': 'fee_create', 'name': 'Create Fee'},
+    {'method': 'POST', 'api': '/core/fee/update/', 'func_name': 'fee_update', 'name': 'Update Fee'},
+    {'method': 'POST', 'api': '/core/fee/delete/', 'func_name': 'fee_delete', 'name': 'Delete Fee'},
+    {'method': 'GET', 'api': '/core/driver/', 'func_name': 'driver_get', 'name': 'Get Driver List'},
+    {'method': 'POST', 'api': '/core/driver/create/', 'func_name': 'driver_create', 'name': 'Create Driver'},
+    {'method': 'POST', 'api': '/core/driver/update/', 'func_name': 'driver_update', 'name': 'Update Driver'},
+    {'method': 'POST', 'api': '/core/driver/delete/', 'func_name': 'driver_delete', 'name': 'Delete Driver'},
+]
+
+existing = set(API.objects.filter(is_delete=False).values_list('api', flat=True))
+count = 0
+for entry in entries:
+    if entry['api'] not in existing:
+        API.objects.create(**entry)
+        count += 1
+print(f'Inserted {count} API entries')
+print(f'Total API entries: {API.objects.filter(is_delete=False).count()}')

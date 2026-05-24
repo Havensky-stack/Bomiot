@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useAppNameStore = defineStore('appname', {
   state: () => ({
-    appName: 'Bomiot'
+    appName: 'awesomewms'
   }),
 
   getters: {

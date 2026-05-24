@@ -11,7 +11,7 @@
           <q-avatar>
             <img src="/icons/logo.png" :alt="appNameStore.appName + ' Logo'" />
           </q-avatar>
-            {{ appNameStore.appName }} Team©
+            {{ appNameStore.appName }}©
         </q-toolbar-title>
         <q-btn dense flat round style="margin-right: 10px" @click="openLink('https://space.bilibili.com/407321291')">
           <img src="/statics/icons/bilibili.svg" style="width: 25px" :alt="appNameStore.appName + ' Bilibili'"/>

@@ -1,545 +1,337 @@
 <div align="center">
-  <img src="media/img/logo.png" alt="Bomiot logo" width="200" height="auto" />
-  <h1>🚀 Bomiot</h1>
-  <p><strong>One App you can do everything</strong></p>
-  <p><em>Powerful Distributed Document Management Framework & Full-Stack Development Platform</em></p>
-
-<!-- Badges -->
-![License: APLv2](https://img.shields.io/github/license/Bomiot/Bomiot)
-![Release Version (latest Version)](https://img.shields.io/github/v/release/Bomiot/Bomiot?color=orange&include_prereleases)
-![i18n Support](https://img.shields.io/badge/i18n-Support-orange.svg)
-
-![repo size](https://img.shields.io/github/repo-size/Bomiot/Bomiot)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Bomiot/Bomiot)
-![Contributors](https://img.shields.io/github/contributors/Bomiot/Bomiot?color=blue)
-
-![GitHub Org's stars](https://img.shields.io/github/stars/Bomiot?style=social)
-![GitHub Follows](https://img.shields.io/github/followers/Singosgu?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/Bomiot/Bomiot?style=social)
-![GitHub Watch](https://img.shields.io/github/watchers/Bomiot/Bomiot?style=social)
+  <img src="media/img/logo.png" alt="awesomewms logo" width="200" height="auto" />
+  <h1>awesomewms - Warehouse Management System</h1>
+  <p><strong>Full-Stack Warehouse Management System based on Bomiot Framework</strong></p>
 
 ![Python](https://img.shields.io/badge/Python-3.9+-yellowgreen)
 ![Django](https://img.shields.io/badge/Django-4.2+-yellowgreen)
-![Quasar Cli](https://img.shields.io/badge/Quasar/cli-2.4.1+-yellowgreen)
-![Vue](https://img.shields.io/badge/Vue-3.4.18+-yellowgreen)
-![NodeJS](https://img.shields.io/badge/NodeJS-18.19.1+-yellowgreen)
-
-[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCPW1wciGMIEh7CYOdLnsloA?color=red&label=YouTube&logo=youtube&style=for-the-badge)](https://www.youtube.com/channel/UCPW1wciGMIEh7CYOdLnsloA)
+![Quasar](https://img.shields.io/badge/Quasar-2.18+-yellowgreen)
+![Vue](https://img.shields.io/badge/Vue-3.4+-yellowgreen)
+![License](https://img.shields.io/badge/License-APLv2-blue)
 
 </div>
 
 ---
 
-## 🌟 Project Introduction
+## System Overview
 
-Bomiot is a revolutionary distributed document management framework and full-stack development platform, with core components written in Rust, designed to solve modern development pain points. We believe that excellent open-source projects should not only have powerful technology stacks but also focus on developer experience and team collaboration efficiency, making it simple and easy to learn.
+awesomewms is a full-stack Warehouse Management System (WMS) built on the Bomiot framework. It provides complete inbound/outbound management, inventory tracking, basic data management, and system monitoring capabilities. The system supports multi-user role-based access control with fine-grained API-level permissions.
 
-### 🎯 Design Philosophy
+### Tech Stack
 
-- **Learning Curve**: Backend supports Django, FastAPI, Flask; Frontend supports React, Angular, Vue, Django built-in Templates (official provides a Vue set)
-- **Developer Friendly**: Seamless experience from 0 to 1, no complex configuration required
-- **Team Collaboration**: Efficient development team interaction mechanisms
-- **Modular Design**: Plugin-based architecture with extensible functionality
-- **Easy Deployment**: pip installation, convenient for team deployment, supports Python 3.9+
-- **Signal Mechanism**: Data management through signal mechanism, more convenient custom API support
-- **Enterprise Ready**: Production-ready, supports large-scale deployment
-
----
-
-## ✨ Core Features
-
-### 🔧 Development Tools
-- ✅ **Project Scaffolding**: One-click project and application creation
-- ✅ **Plugin System**: Rich plugin ecosystem
-- ✅ **Real-time File Monitoring**: Enhanced development efficiency
-
-### 🕐 Task Management
-- ✅ **Scheduled Tasks**: Powerful scheduling system
-- ✅ **Task Monitoring**: Real-time task status tracking
-- ✅ **Error Handling**: Intelligent exception handling mechanism
-- ✅ **Log Management**: Complete logging system
-
-### 🔐 Access Control
-- ✅ **Fine-grained Permissions**: Role-based access control
-- ✅ **JWT Authentication**: Secure identity authentication
-- ✅ **API Permissions**: Interface-level permission management
-- ✅ **Operation Audit**: Complete operation logs
-
-### 🌍 Internationalization
-- ✅ **Multi-language Support**: Built-in internationalization framework
-- ✅ **Dynamic Language Switching**: Runtime language switching
-- ✅ **Localization Configuration**: Regional settings
-
-### 📊 System Monitoring
-- ✅ **Performance Monitoring**: CPU, memory, disk monitoring
-- ✅ **Process Management**: Real-time system process monitoring
-- ✅ **Network Monitoring**: Network traffic statistics
-- ✅ **Health Checks**: System health status detection
-
-### 📚 Application Market
-- ✅ **Application Sharing**: Application market pip installation, convenient and fast
-- ✅ **Component Market**: Hot-pluggable components, dynamic import
+| Layer | Technology |
+|-------|-----------|
+| Backend Framework | Django 4.2+ |
+| API | Django REST Framework |
+| Frontend Framework | Quasar v2 + Vue 3.4 |
+| Database | SQLite / MySQL / PostgreSQL |
+| Authentication | JWT Token |
+| Monitoring | psutil (CPU, Memory, Disk, Network) |
+| Charts | ECharts 5 |
 
 ---
 
-## 🚀 Quick Start
+## Core Features
 
-### 1. Install Bomiot
+### Warehouse Management
 
-```bash
-# Install using pip
-pip install bomiot
+| Module | Description |
+|--------|-------------|
+| **Goods Management** | Product/item master data (code, name, spec, unit, price) |
+| **Bin Management** | Storage location management (code, name, type, capacity) |
+| **Stock Management** | Real-time inventory tracking with stock level alerts |
+| **Supplier Management** | Supplier contact information and address management |
+| **Customer Management** | Customer contact information and address management |
 
-# Or install using poetry
-poetry add bomiot
+### Inbound / Outbound Operations
+
+| Module | Description |
+|--------|-------------|
+| **ASN (Advanced Shipping Notice)** | Inbound order management with status tracking |
+| **ASN Detail** | Line-item details for inbound orders |
+| **DN (Delivery Note)** | Outbound order management with status tracking |
+| **DN Detail** | Line-item details for outbound orders |
+| **Purchase Orders** | Purchase order management linking suppliers and goods |
+
+### Business Flow
+
+```
+[Create Supplier] → [Create Goods] → [Create Bin]
+                                          ↓
+[Create ASN] → [Create ASN Detail] → [Confirm ASN] → [Stock Updated ↑]
+[Create DN] → [Create DN Detail] → [Confirm DN] → [Stock Updated ↓]
 ```
 
-### 2. Initialize Workspace
-
-```bash
-# Initialize Bomiot workspace
-bomiot init
-```
-
-### 3. Create Project
-
-```bash
-# Create new project
-bomiot project my-project
-
-# Create new application
-bomiot new my-app
-```
-
-### 4. Database
-
-```bash
-# Initialize database
-bomiot migrate
-
-# If you created a new application, you can generate new database migration files
-bomiot makemigrations
-```
-
-### 5. Create Administrator
-
-```bash
-# Initialize administrator
-bomiot initadmin
-
-# Reset administrator account password
-bomiot initpwd
-```
-
-### 6. Start Service
-
-```bash
-# Start development server
-bomiot run
-
-# Or specify port
-bomiot run --host 0.0.0.0 --port 8080
-```
+- **ASN Confirm**: When confirmed, stock quantities are automatically increased in the specified bins
+- **DN Confirm**: When confirmed, stock quantities are automatically decreased from the specified bins
+- **Low Stock Alert**: Dashboard displays all items with quantity below 10 units
 
 ---
 
-## 📦 Installation Guide
+## User Management & Permissions
 
-### System Requirements
-
-- **Python**: 3.9 or higher
-- **Node.js**: 18.19.1 or higher
-- **Operating System**: Windows, macOS, Linux
-
-### Modify Frontend
-
-#### 1. Install Frontend Dependencies
-
-```bash
-# Enter frontend directory
-cd my-project/templates
-
-# Install dependencies
-yarn install
-```
-
-#### 2. Open Development baseUrl
-
-```bash
-# Change axios.js
-vim my-project/templates/src/boot/axios.js
+### Permission Model
 
 ```
-
-```bash
-# axios.js code snippet modification
- ...
-const baseURL = 'http://127.0.0.1:8000' // Replace with your actual API URL
-
-const api = axios.create({
-  baseURL: baseURL ##Open this
-})
- ...
+API List → Permission Entries → Team (grant permissions) → User (join team, inherit permissions)
 ```
 
+1. **Create Permissions**: Permissions are defined in the database linking API endpoints to permission names
+2. **Create Teams**: Assign permission sets to teams
+3. **Create Users**: Users are created by administrators (default password = username)
+4. **Assign Teams**: Users inherit all permissions from their team
+5. **Re-login Required**: Permission changes take effect after re-login (JWT-based)
 
-#### 3. Frontend Development Debugging
+### Default Admin Account
 
-```bash
-# Ensure backend is already started
-bomiot run
-```
+- Username: `admin`
+- Password: `admin123`
+- Superuser with all permissions bypass
 
-```bash
-# Restart frontend
-cd my-project/templates
+### Available Permission Categories
 
-&
-
-quasar dev
-```
+- **User Management**: Create user, change password, set team, lock/unlock, delete
+- **Team Management**: Create team, set permissions, modify, delete
+- **Department Management**: Create, modify, delete departments
+- **WMS Entities**: CRUD permissions for Goods, Bin, Stock, Supplier, Customer, ASN, DN, Purchase
 
 ---
 
-## 🛠️ Command Line Tools
+## System Monitoring
 
-Bomiot provides powerful command line tools to make development and management simple and efficient.
+The system includes built-in server monitoring (requires `IS_LAN=true` environment variable):
 
-### 📋 Command Overview
-
-```bash
-bomiot [command] [options]
-```
-
-### 🔧 Core Commands
-
-#### Project Management
-
-```bash
-# Help command
-bomiot -h
-
-# View version number
-bomiot -v
-
-# Initialize workspace
-bomiot init
-
-# Create new project
-bomiot project <project_name>
-
-# Create new application
-bomiot new <app_name>
-
-# Create plugin
-bomiot plugins <plugin_name>
-```
-
-#### Application Market
-
-```bash
-# Application market
-bomiot market <project_name>
-
-# Plugin installation, plugins are automatically hot-imported
-pip install -y <plugin_name>
-
-or
-
-poetry add <plugin_name>
-```
-
-#### Database Management
-
-```bash
-# Create database migration
-bomiot makemigrations
-
-# Execute database migration
-bomiot migrate
-
-# Load initial data
-bomiot loaddata <source>
-
-# Export data
-bomiot dumpdata [appname]
-```
-
-#### User Management
-
-```bash
-# Create administrator account
-bomiot initadmin
-
-# Reset administrator password
-bomiot initpwd
-```
-
-#### Service Management
-
-```bash
-# Start server
-bomiot run [options]
-
-# Deploy project
-bomiot deploy <project_name>
-```
-
-#### System Validation
-
-```bash
-# Initialize validation Keys
-bomiot keys
-```
-
-### 🚀 Server Startup Options
-
-```bash
-bomiot run [options]
-
-Options:
-  --host, -b HOST                Server host address (default: 127.0.0.1)
-  --port, -p PORT                Server port (default: 8000)
-  --workers -w WORKERS           Number of worker processes (default: 1)
-  --log-level LEVEL              Log level (critical/error/warning/info/debug/trace)
-  --ssl-keyfile FILE             SSL key file
-  --ssl-certfile FILE            SSL certificate file
-  --proxy-headers                Enable proxy headers
-  --http HTTP                    HTTP implementation (auto/h11/httptools)
-  --loop LOOP                    Async loop (auto/asyncio/uvloop)
-  --limit-concurrency            Maximum concurrent requests (default: 1000)
-  --backlog                      Maximum waiting connections (default: 128)
-  --timeout-keep-alive           HTTP keep-alive timeout (default: 5)
-  --timeout-graceful-shutdown    Graceful shutdown timeout (default: 30)
-```
-
-### 📝 Usage Examples
-
-```bash
-# Basic startup
-bomiot run
-
-# Test api，method("GET")
-"name": "django", "url": "http://127.0.0.1:8000/test/"
-"name": "fastapi", "url": "http://127.0.0.1:8000/fastapi/test/"
-"name": "flask", "url": "http://127.0.0.1:8000/flask/test/"
-
-# Specify port and host
-bomiot run --host 0.0.0.0 --port 8080
-
-# Production environment configuration
-bomiot run --host 0.0.0.0 --port 80 --workers 4 --log-level info
-
-# SSL configuration
-bomiot run --ssl-keyfile key.pem --ssl-certfile cert.pem
-```
+| Monitor | Description |
+|---------|-------------|
+| **CPU** | Real-time CPU usage tracking with timeline charts |
+| **Memory** | Used/free memory tracking with timeline charts |
+| **Disk** | Per-partition disk usage statistics |
+| **Network** | Bytes sent/received tracking with timeline charts |
+| **PID** | Process-level memory usage tracking |
+| **PID Tree** | Process memory usage treemap visualization |
 
 ---
 
-## 🏗️ Project Structure
+## Navigation Structure
 
-```
-my-project/                    # Project directory
-├── fastapi_app/               # fastapi app
-│   └── main.py                # Main file
-├── flask_app/                 # flask app
-│   └── main.py                # Main file
-├── language/                  # Backend language files
-│   ├── en-US.toml             # English translation file       
-│   └── zh-CN.toml             # Chinese translation file
-├── media/                     # Static files
-│   ├── img/                   # Public images       
-│   └── ***.md                 # Various md documents
-├── static/                    # Static files
-├── __version__.py             # my-project version
-├── bomiotconf.ini             # Bomiot project identifier file
-├── files.py                   # File signals
-├── receiver.py                # Data API signals
-├── server.py                  # Server signals
-├── README.md                  # ReadME documentation
-└── setup.ini                  # Project configuration file
-dbs/                           # Database files
-logs/                          # System logs
-setup.ini                      # Project configuration file
-...
-```
+### WMS Tab
+- **Dashboard** - KPI cards + inbound/outbound charts + low stock alerts
+- **Goods** - Product master data CRUD
+- **Bin** - Storage location CRUD
+- **Stock** - Inventory view
+- **ASN** - Inbound orders with confirm action
+- **ASN Detail** - Inbound line items
+- **DN** - Outbound orders with confirm action
+- **DN Detail** - Outbound line items
+- **Supplier** - Supplier CRUD
+- **Customer** - Customer CRUD
+- **Purchase** - Purchase order CRUD
+
+### Standard Tab
+- **Home** - Welcome page
+- **README** - System documentation
+- **User** - User management
+- **Team** - Team and permission management
+- **Department** - Department management
+- **Upload** - File upload center
+- **Doc** - Document center
+
+### Server Tab (IS_LAN)
+- PID, CPU, Memory, Disk, Network monitoring
+- DashBoard, PID Tree charts
 
 ---
 
-## 🔧 Configuration
+## API Reference
 
-### Environment Configuration
+All API endpoints are prefixed with `/core/` except dashboard endpoints which use `/wmsapp/`.
 
-Bomiot uses configuration files to manage different environment settings:
+### Authentication
 
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/login/` | Login, returns JWT token |
+| POST | `/logout/` | Logout |
+| GET | `/checktoken/` | Check token validity |
+
+### WMS Entities
+
+| Entity | List | Create | Update | Delete |
+|--------|------|--------|--------|--------|
+| Goods | GET `/core/goods/` | POST `/core/goods/create/` | POST `/core/goods/update/` | POST `/core/goods/delete/` |
+| Bin | GET `/core/bin/` | POST `/core/bin/create/` | POST `/core/bin/update/` | POST `/core/bin/delete/` |
+| Stock | GET `/core/stock/` | POST `/core/stock/create/` | POST `/core/stock/update/` | POST `/core/stock/delete/` |
+| Supplier | GET `/core/supplier/` | POST `/core/supplier/create/` | POST `/core/supplier/update/` | POST `/core/supplier/delete/` |
+| Customer | GET `/core/customer/` | POST `/core/customer/create/` | POST `/core/customer/update/` | POST `/core/customer/delete/` |
+| ASN | GET `/core/asn/` | POST `/core/asn/create/` | POST `/core/asn/update/` | POST `/core/asn/delete/` |
+| ASN Detail | GET `/core/asn/detail/` | POST `/core/asn/detail/create/` | POST `/core/asn/detail/update/` | POST `/core/asn/detail/delete/` |
+| DN | GET `/core/dn/` | POST `/core/dn/create/` | POST `/core/dn/update/` | POST `/core/dn/delete/` |
+| DN Detail | GET `/core/dn/detail/` | POST `/core/dn/detail/create/` | POST `/core/dn/detail/update/` | POST `/core/dn/detail/delete/` |
+| Purchase | GET `/core/purchase/` | POST `/core/purchase/create/` | POST `/core/purchase/update/` | POST `/core/purchase/delete/` |
+
+### WMS Business Operations
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/wmsapp/dashboard/` | Get dashboard KPIs |
+| POST | `/wmsapp/asn/confirm/` | Confirm ASN receipt (updates stock) |
+| POST | `/wmsapp/dn/confirm/` | Confirm DN shipment (updates stock) |
+
+### User Management
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/core/user/` | List users |
+| POST | `/core/user/create/` | Create user |
+| POST | `/core/user/changepwd/` | Change password |
+| POST | `/core/user/team/` | Set user team |
+| POST | `/core/user/department/` | Set user department |
+| POST | `/core/user/lock/` | Lock/unlock user |
+| POST | `/core/user/delete/` | Delete user |
+| GET | `/core/user/permission/` | List all permissions |
+
+### Team Management
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/core/team/` | List teams |
+| POST | `/core/team/create/` | Create team |
+| POST | `/core/team/setpermission/` | Set team permissions |
+| POST | `/core/team/change/` | Rename team |
+| POST | `/core/team/delete/` | Delete team |
+
+### Common Parameters
+
+- **Pagination**: `?page=1&max_page=30`
+- **Search**: `?params={"data__fieldname__icontains":"keyword"}`
+- **Auth Header**: `token: <JWT_TOKEN>`
+
+---
+
+## Deployment
+
+### Prerequisites
+
+- Python 3.9+
+- Node.js 18.19+ (for frontend build only)
+- SQLite (default) or MySQL/PostgreSQL
+
+### Quick Start
+
+```bash
+# 1. Clone and enter project
+cd Bomiot/awesomewms
+
+# 2. Create conda environment
+conda create -n wms python=3.11 -y && conda activate wms
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Initialize database
+cd ../ && PYTHONPATH=. python bomiot/server/manage.py migrate
+
+# 5. Seed permissions and API data
+PYTHONPATH=. python seed_api.py
+PYTHONPATH=. python seed_permissions.py
+
+# 6. Create admin user (via Django shell)
+PYTHONPATH=. python bomiot/server/manage.py shell -c "
+from django.contrib.auth import get_user_model
+u = get_user_model().objects.create_superuser('admin', 'admin@wms.com', 'admin123')
+"
+
+# 7. Build frontend
+cd awesomewms/templates && npm install && npm run build
+
+# 8. Start server (with monitoring)
+cd ../../
+IS_LAN=true PYTHONPATH=. python bomiot/server/manage.py runserver 0.0.0.0:8000
+
+# 9. Access system
+# Open http://127.0.0.1:8000/
+# Login: admin / admin123
+```
+
+### Docker Deployment
+
+```bash
+cd deploy
+docker-compose up -d
+```
+
+### Configuration
+
+Edit `awesomewms/setup.ini`:
 ```ini
-# setup.ini
 [project]
-name = my-project
+name = awesomewms
 
-[database](requires keys validation)
-# Supports multiple databases (sqlite, mysql, oracle, postgresql)
-engine = sqlite
+[database]
+engine = sqlite          # or mysql, postgresql, oracle
 name = db_name
 user = db_user
 password = db_pwd
 host = db_host
 port = db_port
 
-[local]
-time_zone = UTC
-
 [jwt]
 user_jwt_time = 1000000
 
-[throttle]
-allocation_seconds = 1
-throttle_seconds = 10
-
 [request]
-limit = 2
+limit = 5                # Max failed login attempts before lockout
 
-[file](requires keys validation)
-file_size = 102400000
-file_extension = py,png,jpg,jpeg,gif,bmp,webp,txt,md,html,htm,js,css,json,xml,csv,xlsx,xls,ppt,pptx,doc,docx,pdf
-```
-
-### Database Configuration
-
-Supports multiple databases:
-
-- **SQLite** (default)
-- **MySQL** (requires keys validation)
-- **PostgreSQL** (requires keys validation)
-- **Oracle** (requires keys validation)
-
----
-
-## 🌐 Deployment Guide
-
-### Supervisor
-
-```bash
-# Generate deployment files
-bomiot deploy my-project
-
-# Point supervisord.conf to this file to complete daemon process deployment
-
-```
-
-## Scheduled Tasks
-
-### Supported Scheduled Tasks
-
-```python
-ARGS_MAP = {
-    'cron': ['year', 'month', 'day', 'week', 'day_of_week', 'hour', 'minute', 'second', 'start_date', 'end_date','timezone'],
-    'interval': ['weeks', 'days', 'hours', 'minutes', 'seconds', 'start_date', 'end_date', 'timezone'],
-    'date': ['run_date', 'timezone']
-}
-```
-
-### Writing Scheduled Tasks
-
-```python
-from bomiot.server.core.signal import bomiot_signals
-
-def my_scheduled_task(sender, **kwargs):
-    print("Execute scheduled task")
-    
-# Send signal to bomiot anywhere, usually written in urls.py, refresh web page to take effect
-bomiot_signals.send(sender=my_scheduled_task, msg={
-    'models': 'JobList',
-    'data': {
-        'trigger': 'interval',
-        'seconds': 60,
-        'end_date': '2099-05-30',
-        'description': 'Execute every 60 seconds, end on May 30, 2099'
-    }
-})
-```
-
-### One-time Execution Tasks Only
-
-```python
-from bomiot.server.core.signal import bomiot_signals
-
-def my_once_task(sender, **kwargs):
-    print("Execute one-time task")
-    
-# Send signal to bomiot anywhere to execute one-time task
-bomiot_signals.send(sender=my_once_task, msg={
-    'models': 'Function'
-})
+[file]
+file_size = 102400000    # Max upload size in bytes
 ```
 
 ---
 
-## 🤝 Contributing
+## Project Structure
 
-We welcome all forms of contributions!
-
-### Ways to Contribute
-
-1. **Report Bugs**: [Create Issue](https://github.com/Bomiot/Bomiot/issues/new?template=bug_report.md)
-2. **Feature Requests**: [Submit Feature Request](https://github.com/Bomiot/Bomiot/issues/new?template=feature_request.md)
-3. **Code Contributions**: Fork the project and submit Pull Request
-4. **Documentation Improvements**: Help improve documentation
-5. **Community Support**: Answer other users' questions
-
-### Ways to Contribute Code
-
-```bash
-# 1. Fork the project
-# 2. Clone your Fork
-git clone https://github.com/your-username/Bomiot.git
-
-# 3. Create feature branch
-git checkout -b feature/amazing-feature
-
-# 4. Commit changes
-git commit -m 'Add amazing feature'
-
-# 5. Push to branch
-git push origin feature/amazing-feature
-
-# 6. Create Pull Request
 ```
-
-### Code Standards
-
-- Follow PEP 8 Python code standards
-- Add appropriate comments and docstrings
-- Write unit tests
-- Ensure all tests pass
-
----
-
-## 📄 License
-
-This project is licensed under the [APLv2](LICENSE) License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🔗 Related Links
-
-### 📺 Video Tutorials
-- [YouTube Channel](https://www.youtube.com/channel/UCPW1wciGMIEh7CYOdLnsloA)
-
-### 🐛 Issue Reporting
-- [Report Bug](https://github.com/Bomiot/Bomiot/issues/new?template=bug_report.md)
-- [Feature Request](https://github.com/Bomiot/Bomiot/issues/new?template=feature_request.md)
-
-### 💬 Community
-- [GitHub Discussions](https://github.com/Bomiot/Bomiot/discussions)
-- [Issues](https://github.com/Bomiot/Bomiot/issues)
+Bomiot/
+├── awesomewms/                    # WMS project
+│   ├── language/                  # i18n files (en-US.toml, zh-CN.toml)
+│   ├── media/                     # Static assets and markdown docs
+│   ├── templates/                 # Frontend (Quasar/Vue 3)
+│   │   └── src/
+│   │       ├── boot/              # Axios config, event bus
+│   │       ├── components/        # Reusable components
+│   │       │   ├── echarts/       # Chart components
+│   │       │   ├── md/            # Markdown renderer
+│   │       │   ├── user/          # User/Team/Department list components
+│   │       │   └── wms/           # WMS CRUD table component
+│   │       ├── i18n/              # Frontend translations
+│   │       ├── layouts/           # Main layout with header/menu
+│   │       ├── pages/             # Page components (one per route)
+│   │       ├── router/            # Vue Router config
+│   │       └── stores/            # Pinia stores
+│   ├── wmsapp/                    # WMS backend app
+│   │   ├── views.py               # Dashboard, ASN/DN confirm views
+│   │   └── urls.py                # WMS-specific routes
+│   ├── bomiotconf.ini             # Project identifier
+│   ├── receiver.py                # Data signal handlers
+│   └── setup.ini                  # Project configuration
+├── bomiot/server/                 # Bomiot framework core
+│   └── core/
+│       ├── models.py              # All database models
+│       ├── views.py               # User/Team/Department views
+│       ├── urls.py                # Core URL routing
+│       ├── function/              # WMS entity handlers
+│       ├── client.py              # Server monitoring endpoints
+│       ├── page.py                # Pagination classes
+│       ├── jwt_auth.py            # JWT authentication
+│       └── auth.py                # Custom authentication backend
+├── seed_api.py                    # API table seed script
+├── seed_permissions.py            # Permission table seed script
+└── deploy/                        # Docker and deployment configs
+```
 
 ---
 
 <div align="center">
 
-**⭐ If this project helps you, please give us a Star!**
-
-Made with ❤️ by [Bomiot Team](https://github.com/Bomiot)
+**awesomewms - Full-Stack Warehouse Management System**
 
 </div>

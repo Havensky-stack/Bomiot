@@ -38,12 +38,13 @@ class DashboardView(APIView):
 
         low_stock = []
         for s in Stock.objects.filter(is_delete=False):
-            qty = int(s.data.get('qty', 0)) if s.data else 0
+            inner = (s.data or {}).get('data', {})
+            qty = int(inner.get('qty', 0))
             if qty < 10:
                 low_stock.append({
                     'id': s.id,
-                    'goods_name': s.data.get('goods_name', ''),
-                    'bin_code': s.data.get('bin_code', ''),
+                    'goods_name': inner.get('goods_name', ''),
+                    'bin_code': inner.get('bin_code', ''),
                     'qty': qty,
                 })
 
@@ -77,7 +78,7 @@ class ASNConfirmView(APIView):
         asn.save()
 
         asn_details = ASNDetail.objects.filter(
-            data__asn_id=str(asn_id), is_delete=False
+            data__data__asn_id=str(asn_id), is_delete=False
         )
         for detail in asn_details:
             d = detail.data or {}
@@ -86,20 +87,24 @@ class ASNConfirmView(APIView):
             qty = int(d.get('qty', 0))
 
             existing = Stock.objects.filter(
-                data__goods_id=goods_id, data__bin_id=bin_id, is_delete=False
+                data__data__goods_id=goods_id, data__data__bin_id=bin_id, is_delete=False
             ).first()
             if existing:
                 ed = existing.data or {}
-                ed['qty'] = int(ed.get('qty', 0)) + qty
+                inner = ed.get('data', {})
+                inner['qty'] = int(inner.get('qty', 0)) + qty
+                ed['data'] = inner
                 existing.data = ed
                 existing.save()
             else:
                 Stock.objects.create(data={
-                    'goods_id': goods_id,
-                    'bin_id': bin_id,
-                    'qty': qty,
-                    'goods_name': d.get('goods_name', ''),
-                    'bin_code': d.get('bin_code', ''),
+                    'data': {
+                        'goods_id': goods_id,
+                        'bin_id': bin_id,
+                        'qty': qty,
+                        'goods_name': d.get('goods_name', ''),
+                        'bin_code': d.get('bin_code', ''),
+                    },
                 })
 
         return Response({'msg': 'ASN confirmed and stock updated'})
@@ -121,7 +126,7 @@ class DNConfirmView(APIView):
         dn.save()
 
         dn_details = DNDetail.objects.filter(
-            data__dn_id=str(dn_id), is_delete=False
+            data__data__dn_id=str(dn_id), is_delete=False
         )
         for detail in dn_details:
             d = detail.data or {}
@@ -130,11 +135,13 @@ class DNConfirmView(APIView):
             qty = int(d.get('qty', 0))
 
             existing = Stock.objects.filter(
-                data__goods_id=goods_id, data__bin_id=bin_id, is_delete=False
+                data__data__goods_id=goods_id, data__data__bin_id=bin_id, is_delete=False
             ).first()
             if existing:
                 ed = existing.data or {}
-                ed['qty'] = max(0, int(ed.get('qty', 0)) - qty)
+                inner = ed.get('data', {})
+                inner['qty'] = max(0, int(inner.get('qty', 0)) - qty)
+                ed['data'] = inner
                 existing.data = ed
                 existing.save()
 

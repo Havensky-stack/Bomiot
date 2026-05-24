@@ -93,6 +93,15 @@ class TeamFilter(FilterSet):
         filter_overrides = JSONFIELD_FILTER_OVERRIDE
 
 
+class APIFilter(FilterSet):
+    """
+    API filter
+    """
+    class Meta:
+        model = models.API
+        fields = '__all__'
+
+
 class DepartmentFilter(FilterSet):
     """
     Team filter

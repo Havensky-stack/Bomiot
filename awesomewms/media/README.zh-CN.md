@@ -1,544 +1,332 @@
 <div align="center">
-  <img src="media/img/logo.png" alt="Bomiot logo" width="200" height="auto" />
-  <h1>🚀 Bomiot</h1>
-  <p><strong>One App you can do everything</strong></p>
-  <p><em>强大的分布式文档管理框架 & 全栈开发平台</em></p>
-
-<!-- Badges -->
-![License: APLv2](https://img.shields.io/github/license/Bomiot/Bomiot)
-![Release Version (latest Version)](https://img.shields.io/github/v/release/Bomiot/Bomiot?color=orange&include_prereleases)
-![i18n Support](https://img.shields.io/badge/i18n-Support-orange.svg)
-
-![repo size](https://img.shields.io/github/repo-size/Bomiot/Bomiot)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Bomiot/Bomiot)
-![Contributors](https://img.shields.io/github/contributors/Bomiot/Bomiot?color=blue)
-
-![GitHub Org's stars](https://img.shields.io/github/stars/Bomiot?style=social)
-![GitHub Follows](https://img.shields.io/github/followers/Singosgu?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/Bomiot/Bomiot?style=social)
-![GitHub Watch](https://img.shields.io/github/watchers/Bomiot/Bomiot?style=social)
+  <img src="media/img/logo.png" alt="awesomewms logo" width="200" height="auto" />
+  <h1>awesomewms - 仓库管理系统</h1>
+  <p><strong>基于 Bomiot 框架的全栈仓库管理系统</strong></p>
 
 ![Python](https://img.shields.io/badge/Python-3.9+-yellowgreen)
 ![Django](https://img.shields.io/badge/Django-4.2+-yellowgreen)
-![Quasar Cli](https://img.shields.io/badge/Quasar/cli-2.4.1+-yellowgreen)
-![Vue](https://img.shields.io/badge/Vue-3.4.18+-yellowgreen)
-![NodeJS](https://img.shields.io/badge/NodeJS-18.19.1+-yellowgreen)
-
-[![BiliBili](https://img.shields.io/badge/BiliBili-4987-red)](https://space.bilibili.com/407321291/channel/seriesdetail?sid=776320)
+![Quasar](https://img.shields.io/badge/Quasar-2.18+-yellowgreen)
+![Vue](https://img.shields.io/badge/Vue-3.4+-yellowgreen)
+![License](https://img.shields.io/badge/License-APLv2-blue)
 
 </div>
 
 ---
 
-## 🌟 项目简介
+## 系统概述
 
-Bomiot 是一个革命性的分布式文档管理框架和全栈开发平台，核心部分是用Rust编写，专为解决现代开发中的痛点而设计。我们相信，优秀的开源项目不仅要有强大的技术栈，更要注重开发者的使用体验和团队协作效率，简单易学。
+awesomewms 是基于 Bomiot 框架构建的全栈仓库管理系统（WMS），提供完整的入库/出库管理、库存跟踪、基础数据管理和系统监控功能。系统支持多用户基于角色的访问控制，具备 API 级别的细粒度权限管理。
 
-### 🎯 设计理念
+### 技术栈
 
-- **学习曲线**：后端支持Django，FastAPI，Flask，前端支持React，Angular，Vue，Django自带Templates（官方提供的是一套Vue）
-- **开发者友好**: 从 0 到 1 的无缝体验，无需复杂配置
-- **团队协作**: 高效的开发团队交互机制
-- **模块化设计**: 插件化架构，功能可扩展
-- **部署容易**：pip安装，方便团队各自部署，支持3.9以上版本的python
-- **信号机制**：由信号机制管理数据，更便捷的自定义api支持
-- **企业级**: 生产环境就绪，支持大规模部署
-
----
-
-## ✨ 核心特性
-
-### 🔧 开发工具
-- ✅ **项目脚手架**: 一键创建项目和应用
-- ✅ **插件系统**: 丰富的插件生态
-- ✅ **实时文件监控**: 开发效率提升
-
-### 🕐 任务管理
-- ✅ **定时任务**: 强大的调度系统
-- ✅ **任务监控**: 实时任务状态跟踪
-- ✅ **错误处理**: 智能异常处理机制
-- ✅ **日志管理**: 完整的日志记录系统
-
-### 🔐 权限控制
-- ✅ **细粒度权限**: 基于角色的访问控制
-- ✅ **JWT 认证**: 安全的身份验证
-- ✅ **API 权限**: 接口级别的权限管理
-- ✅ **操作审计**: 完整的操作日志
-
-### 🌍 国际化
-- ✅ **多语言支持**: 内置国际化框架
-- ✅ **动态语言切换**: 运行时语言切换
-- ✅ **本地化配置**: 区域化设置
-
-### 📊 系统监控
-- ✅ **性能监控**: CPU、内存、磁盘监控
-- ✅ **进程管理**: 系统进程实时监控
-- ✅ **网络监控**: 网络流量统计
-- ✅ **健康检查**: 系统健康状态检测
-
-### 📚 应用市场
-- ✅ **应用分享**：应用市场pip安装，方便快捷
-- ✅ **组件市场**：组件热插拔，动态导入
+| 层级 | 技术 |
+|------|------|
+| 后端框架 | Django 4.2+ |
+| API | Django REST Framework |
+| 前端框架 | Quasar v2 + Vue 3.4 |
+| 数据库 | SQLite / MySQL / PostgreSQL |
+| 认证 | JWT Token |
+| 监控 | psutil (CPU、内存、磁盘、网络) |
+| 图表 | ECharts 5 |
 
 ---
 
-## 🚀 快速开始
+## 核心功能
 
-### 1. 安装 Bomiot
+### 仓库基础数据管理
 
-```bash
-# 使用 pip 安装
-pip install bomiot
+| 模块 | 说明 |
+|------|------|
+| **商品管理** | 产品/物料主数据（编码、名称、规格、单位、价格） |
+| **库位管理** | 存储位置管理（编码、名称、类型、容量） |
+| **库存管理** | 实时库存跟踪，低库存预警 |
+| **供应商管理** | 供应商联系信息及地址管理 |
+| **客户管理** | 客户联系信息及地址管理 |
 
-# 或使用 poetry 安装
-poetry add bomiot
+### 出入库业务
+
+| 模块 | 说明 |
+|------|------|
+| **入库单 (ASN)** | 入库订单管理，支持状态跟踪 |
+| **入库单明细** | 入库单行项目详情 |
+| **出库单 (DN)** | 出库订单管理，支持状态跟踪 |
+| **出库单明细** | 出库单行项目详情 |
+| **采购订单** | 采购订单管理，关联供应商和商品 |
+
+### 业务流程
+
+```
+[创建供应商] → [创建商品] → [创建库位]
+                                ↓
+[创建入库单] → [创建入库单明细] → [确认入库] → [库存增加 ↑]
+[创建出库单] → [创建出库单明细] → [确认出库] → [库存减少 ↓]
 ```
 
-### 2. 初始化工作空间
-
-```bash
-# 初始化 Bomiot 工作空间
-bomiot init
-```
-
-### 3. 创建项目
-
-```bash
-# 创建新项目
-bomiot project my-project
-
-# 创建应用
-bomiot new my-app
-```
-
-### 4. 数据库
-
-```bash
-# 初始化数据库
-bomiot migrate
-
-# 如果创建了新应用，可以生成新的数据库迁移文件
-bomiot makemigrations
-```
-
-### 5. 新建管理员
-
-```bash
-# 初始化管理员
-bomiot initadmin
-
-# 重置管理员账号密码
-bomiot initpwd
-```
-
-### 6. 启动服务
-
-```bash
-# 启动开发服务器
-bomiot run
-
-# 或指定端口
-bomiot run --host 0.0.0.0 --port 8080
-```
+- **确认入库**：入库单确认后，自动在指定库位增加库存
+- **确认出库**：出库单确认后，自动从指定库位扣减库存
+- **低库存预警**：仪表板展示所有数量低于 10 的商品
 
 ---
 
-## 📦 安装指南
+## 用户管理与权限
 
-### 系统要求
-
-- **Python**: 3.9 或更高版本
-- **Node.js**: 18.19.1 或更高版本
-- **操作系统**: Windows, macOS, Linux
-
-### 修改前端
-
-#### 1. 安装前端依赖
-
-```bash
-# 进入前端目录
-cd my-project/templates
-
-# 安装依赖
-yarn install
-```
-
-#### 3. 打开开发baseUrl
-
-```bash
-# 修改axios.js
-vim my-project/templates/src/boot/axios.js
+### 权限模型
 
 ```
-
-```bash
-# axios.js代码片段修改
- ...
-const baseURL = 'http://127.0.0.1:8000' // Replace with your actual API URL
-
-const api = axios.create({
-  baseURL: baseURL ##打开这里
-})
- ...
+API 列表 → 权限条目 → 团队（勾选权限） → 用户（加入团队，继承权限）
 ```
 
+1. **创建权限**：权限在数据库中定义，关联 API 端点与权限名称
+2. **创建团队**：为团队分配权限集
+3. **创建用户**：由管理员创建用户（默认密码与用户名相同）
+4. **分配团队**：用户加入团队后自动继承团队权限
+5. **重新登录**：权限变更后需重新登录生效（JWT 机制）
 
-#### 3. 前端开发调试
+### 默认管理员账号
 
-```bash
-# 确保后端已经启动
-bomiot run
-```
+- 用户名：`admin`
+- 密码：`admin123`
+- 超级用户，不受权限限制
 
-```bash
-# 前端重新启动
-ce my-project/templates
+### 权限分类
 
-&
-
-quasar d
-```
+- **用户管理**：创建用户、修改密码、设置团队、锁定/解锁、删除
+- **团队管理**：创建团队、设置权限、修改、删除
+- **部门管理**：创建、修改、删除部门
+- **WMS 实体**：商品、库位、库存、供应商、客户、入库单、出库单、采购订单的增删改查权限
 
 ---
 
-## 🛠️ 命令行工具
+## 系统监控
 
-Bomiot 提供了强大的命令行工具，让开发和管理变得简单高效。
+系统内置服务器监控功能（需设置环境变量 `IS_LAN=true`）：
 
-### 📋 命令概览
-
-```bash
-bomiot [命令] [选项]
-```
-
-### 🔧 核心命令
-
-#### 项目管理
-
-```bash
-# Help指令
-bomiot -h
-
-# 查看版本号
-bomiot -v
-
-# 初始化工作空间
-bomiot init
-
-# 创建新项目
-bomiot project <project_name>
-
-# 创建新应用
-bomiot new <app_name>
-
-# 创建插件
-bomiot plugins <plugin_name>
-```
-
-#### 应用市场
-
-```bash
-# 应用市场
-bomiot market <project_name>
-
-# 插件安装，插件是自动热导入的
-pip install -y <plugin_name>
-
-or
-
-poetry add <plugin_name>
-```
-
-#### 数据库管理
-
-```bash
-# 创建数据库迁移
-bomiot makemigrations
-
-# 执行数据库迁移
-bomiot migrate
-
-# 加载初始数据
-bomiot loaddata <source>
-
-# 导出数据
-bomiot dumpdata [appname]
-```
-
-#### 用户管理
-
-```bash
-# 创建管理员账户
-bomiot initadmin
-
-# 重置管理员密码
-bomiot initpwd
-```
-
-#### 服务管理
-
-```bash
-# 启动服务器
-bomiot run [选项]
-
-# 部署项目
-bomiot deploy <project_name>
-```
-
-#### 系统校验
-
-```bash
-# 初始化校验Keys
-bomiot keys
-```
-
-### 🚀 服务器启动选项
-
-```bash
-bomiot run [选项]
-
-选项:
-  --host, -b HOST                服务器主机地址 (默认: 127.0.0.1)
-  --port, -p PORT                服务器端口 (默认: 8000)
-  --workers -w WORKERS           工作进程数 (默认: 1)
-  --log-level LEVEL              日志级别 (critical/error/warning/info/debug/trace)
-  --ssl-keyfile FILE             SSL 密钥文件
-  --ssl-certfile FILE            SSL 证书文件
-  --proxy-headers                启用代理头
-  --http HTTP                    HTTP 实现 (auto/h11/httptools)
-  --loop LOOP                    异步循环 (auto/asyncio/uvloop)
-  --limit-concurrency            最大并发请求数(默认：1000)
-  --backlog                      最大等待连接数(默认：128)
-  --timeout-graceful-shutdown    优雅关闭超时时间(默认：30)
-```
-
-### 📝 使用示例
-
-```bash
-# 基本启动
-bomiot run
-
-# 测试api，method("GET")
-"name": "django", "url": "http://127.0.0.1:8000/test/"
-"name": "fastapi", "url": "http://127.0.0.1:8000/fastapi/test/"
-"name": "flask", "url": "http://127.0.0.1:8000/flask/test/"
-
-# 指定端口和主机
-bomiot run --host 0.0.0.0 --port 8080
-
-# 生产环境配置
-bomiot run --host 0.0.0.0 --port 80 --workers 4 --log-level info
-
-# SSL 配置
-bomiot run --ssl-keyfile key.pem --ssl-certfile cert.pem
-```
+| 监控项 | 说明 |
+|--------|------|
+| **CPU** | 实时 CPU 使用率追踪，含时间线图表 |
+| **Memory** | 已用/空闲内存追踪，含时间线图表 |
+| **Disk** | 各分区磁盘使用统计 |
+| **Network** | 发送/接收字节数追踪，含时间线图表 |
+| **PID** | 进程级内存使用追踪 |
+| **PID Tree** | 进程内存使用矩形树图 |
 
 ---
 
-## 🏗️ 项目结构
+## 导航结构
 
-```
-my-project/                    # 项目目录
-├── fastapi_app/               # fastapi app
-│   └── main.py                # 主文件
-├── flask_app/                 # flask app
-│   └── main.py                # 主文件
-├── language/                  # 后端语言文件
-│   ├── en-US.toml             # 英文翻译文件       
-│   └── zh-CN.toml             # 中文翻译文件
-├── media/                     # 静态文件
-│   ├── img/                   # 公用图片       
-│   └── ***.md                 # md的各种文档
-├── static/                    # 静态文件
-├── __version__.py             # my-project版本
-├── bomiotconf.ini             # Bomiot项目标识文件
-├── files.py                   # 文件信号
-├── receiver.py                # 数据API信号
-├── server.py                  # 服务器信号
-├── README.md                  # ReadME文档
-└── setup.ini                  # 项目配置文件
-dbs/                           # 数据库文件
-logs/                          # 系统日志
-setup.ini                      # 项目配置文件
-...
-```
+### WMS 标签页
+- **仪表板** - KPI 卡片 + 出入库图表 + 低库存预警
+- **商品** - 商品主数据增删改查
+- **库位** - 存储位置增删改查
+- **库存** - 库存查看
+- **入库单** - 入库订单（含确认入库操作）
+- **入库单明细** - 入库行项目
+- **出库单** - 出库订单（含确认出库操作）
+- **出库单明细** - 出库行项目
+- **供应商** - 供应商增删改查
+- **客户** - 客户增删改查
+- **采购订单** - 采购订单增删改查
+
+### 标准标签页
+- **首页** - 欢迎页
+- **README** - 系统说明文档
+- **用户** - 用户管理
+- **团队** - 团队及权限管理
+- **部门** - 部门管理
+- **上传** - 文件上传中心
+- **文档** - 文档中心
+
+### 服务器标签页（需 IS_LAN）
+- PID、CPU、Memory、Disk、Network 监控
+- DashBoard、PID Tree 图表
 
 ---
 
-## 🔧 配置说明
+## API 参考
 
-### 环境配置
+### 认证
 
-Bomiot 使用配置文件来管理不同环境的设置：
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| POST | `/login/` | 登录，返回 JWT token |
+| POST | `/logout/` | 登出 |
+| GET | `/checktoken/` | 查看 token 信息 |
 
+### WMS 实体
+
+| 实体 | 列表 | 创建 | 更新 | 删除 |
+|------|------|------|------|------|
+| 商品 | GET `/core/goods/` | POST `/core/goods/create/` | POST `/core/goods/update/` | POST `/core/goods/delete/` |
+| 库位 | GET `/core/bin/` | POST `/core/bin/create/` | POST `/core/bin/update/` | POST `/core/bin/delete/` |
+| 库存 | GET `/core/stock/` | POST `/core/stock/create/` | POST `/core/stock/update/` | POST `/core/stock/delete/` |
+| 供应商 | GET `/core/supplier/` | POST `/core/supplier/create/` | POST `/core/supplier/update/` | POST `/core/supplier/delete/` |
+| 客户 | GET `/core/customer/` | POST `/core/customer/create/` | POST `/core/customer/update/` | POST `/core/customer/delete/` |
+| 入库单 | GET `/core/asn/` | POST `/core/asn/create/` | POST `/core/asn/update/` | POST `/core/asn/delete/` |
+| 入库单明细 | GET `/core/asn/detail/` | POST `/core/asn/detail/create/` | POST `/core/asn/detail/update/` | POST `/core/asn/detail/delete/` |
+| 出库单 | GET `/core/dn/` | POST `/core/dn/create/` | POST `/core/dn/update/` | POST `/core/dn/delete/` |
+| 出库单明细 | GET `/core/dn/detail/` | POST `/core/dn/detail/create/` | POST `/core/dn/detail/update/` | POST `/core/dn/detail/delete/` |
+| 采购订单 | GET `/core/purchase/` | POST `/core/purchase/create/` | POST `/core/purchase/update/` | POST `/core/purchase/delete/` |
+
+### WMS 业务操作
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| GET | `/wmsapp/dashboard/` | 获取仪表板 KPI 数据 |
+| POST | `/wmsapp/asn/confirm/` | 确认入库收货（更新库存） |
+| POST | `/wmsapp/dn/confirm/` | 确认出库发货（更新库存） |
+
+### 用户管理
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| GET | `/core/user/` | 获取用户列表 |
+| POST | `/core/user/create/` | 创建用户 |
+| POST | `/core/user/changepwd/` | 修改密码 |
+| POST | `/core/user/team/` | 设置用户团队 |
+| POST | `/core/user/department/` | 设置用户部门 |
+| POST | `/core/user/lock/` | 锁定/解锁用户 |
+| POST | `/core/user/delete/` | 删除用户 |
+| GET | `/core/user/permission/` | 获取所有权限列表 |
+
+### 团队管理
+
+| 方法 | 端点 | 说明 |
+|------|------|------|
+| GET | `/core/team/` | 获取团队列表 |
+| POST | `/core/team/create/` | 创建团队 |
+| POST | `/core/team/setpermission/` | 设置团队权限 |
+| POST | `/core/team/change/` | 重命名团队 |
+| POST | `/core/team/delete/` | 删除团队 |
+
+### 通用参数
+
+- **分页**：`?page=1&max_page=30`
+- **搜索**：`?params={"data__字段名__icontains":"关键字"}`
+- **认证头**：`token: <JWT_TOKEN>`
+
+---
+
+## 部署指南
+
+### 环境要求
+
+- Python 3.9+
+- Node.js 18.19+（仅构建前端时需要）
+- SQLite（默认）或 MySQL/PostgreSQL
+
+### 快速启动
+
+```bash
+# 1. 进入项目目录
+cd Bomiot
+
+# 2. 创建 conda 环境
+conda create -n wms python=3.11 -y && conda activate wms
+
+# 3. 安装依赖
+pip install -r requirements.txt
+
+# 4. 初始化数据库
+PYTHONPATH=. python bomiot/server/manage.py migrate
+
+# 5. 填充权限和 API 数据
+PYTHONPATH=. python seed_api.py
+PYTHONPATH=. python seed_permissions.py
+
+# 6. 创建管理员账号
+PYTHONPATH=. python bomiot/server/manage.py shell -c "
+from django.contrib.auth import get_user_model
+u = get_user_model().objects.create_superuser('admin', 'admin@wms.com', 'admin123')
+"
+
+# 7. 构建前端
+cd awesomewms/templates && npm install && npm run build && cd ../..
+
+# 8. 启动服务（带监控）
+IS_LAN=true PYTHONPATH=. python bomiot/server/manage.py runserver 0.0.0.0:8000
+
+# 9. 访问系统 http://127.0.0.1:8000/，使用 admin/admin123 登录
+```
+
+### Docker 部署
+
+```bash
+cd deploy
+docker-compose up -d
+```
+
+### 配置说明
+
+编辑 `awesomewms/setup.ini`：
 ```ini
-# setup.ini
 [project]
-name = my-project
+name = awesomewms
 
-[database](需要keys校验)
-# 支持多种数据库 (sqlite、mysql、oracle、postgresql)
-engine = sqlite
+[database]
+engine = sqlite          # 可选: mysql, postgresql, oracle
 name = db_name
 user = db_user
 password = db_pwd
 host = db_host
 port = db_port
 
-[local]
-time_zone = UTC
-
 [jwt]
-user_jwt_time = 1000000
-
-[throttle]
-allocation_seconds = 1
-throttle_seconds = 10
+user_jwt_time = 1000000   # JWT 过期时间（秒）
 
 [request]
-limit = 2
+limit = 5                 # 登录失败锁定次数
 
-[file](需要keys校验)
-file_size = 102400000
-file_extension = py,png,jpg,jpeg,gif,bmp,webp,txt,md,html,htm,js,css,json,xml,csv,xlsx,xls,ppt,pptx,doc,docx,pdf
-```
-
-### 数据库配置
-
-支持多种数据库：
-
-- **SQLite** (默认)
-- **MySQL**  (需要keys校验)
-- **PostgreSQL** (需要keys校验)
-- **Oracle** (需要keys校验)
-
----
-
-## 🌐 部署指南
-
-### Supervisor
-
-```bash
-# 生成部署文件
-bomiot deploy my-project
-
-# supervisord.conf指向这个文件，就可以完成守护进程部署
-
-```
-
-## 定时任务
-
-### 支持的定时任务
-
-```python
-ARGS_MAP = {
-    'cron': ['year', 'month', 'day', 'week', 'day_of_week', 'hour', 'minute', 'second', 'start_date', 'end_date','timezone'],
-    'interval': ['weeks', 'days', 'hours', 'minutes', 'seconds', 'start_date', 'end_date', 'timezone'],
-    'date': ['run_date', 'timezone']
-}
-```
-
-### 定时任务编写
-
-```python
-from bomiot.server.core.signal import bomiot_signals
-
-def my_scheduled_task(sender, **kwargs):
-    print("执行定时任务")
-    
-# 任意位置给bomiot发送信号，一般是写在urls.py里面，刷新web端页面即生效
-bomiot_signals.send(sender=my_scheduled_task, msg={
-    'models': 'JobList',
-    'data': {
-        'trigger': 'interval',
-        'seconds': 60,
-        'end_date': '2099-05-30',
-        'description': '每60秒执行一次，2099年5月30日结束'
-    }
-})
-```
-
-### 仅一次性执行的任务
-
-```python
-from bomiot.server.core.signal import bomiot_signals
-
-def my_once_task(sender, **kwargs):
-    print("执行一次性任务")
-    
-# 任意位置给bomiot发送信号，即可以执行一次性任务
-bomiot_signals.send(sender=my_once_task, msg={
-    'models': 'Fuction'
-})
+[file]
+file_size = 102400000     # 最大上传文件大小（字节）
 ```
 
 ---
 
-## 🤝 贡献指南
+## 项目结构
 
-我们欢迎所有形式的贡献！
-
-### 贡献方式
-
-1. **报告 Bug**: [创建 Issue](https://github.com/Bomiot/Bomiot/issues/new?template=bug_report.md)
-2. **功能请求**: [提交功能请求](https://github.com/Bomiot/Bomiot/issues/new?template=feature_request.md)
-3. **代码贡献**: Fork 项目并提交 Pull Request
-4. **文档改进**: 帮助完善文档
-5. **社区支持**: 回答其他用户的问题
-
-### 开发环境设置
-
-```bash
-# 1. Fork 项目
-# 2. 克隆你的 Fork
-git clone https://github.com/your-username/Bomiot.git
-
-# 3. 创建功能分支
-git checkout -b feature/amazing-feature
-
-# 4. 提交更改
-git commit -m 'Add amazing feature'
-
-# 5. 推送到分支
-git push origin feature/amazing-feature
-
-# 6. 创建 Pull Request
 ```
-
-### 代码规范
-
-- 遵循 PEP 8 Python 代码规范
-- 添加适当的注释和文档字符串
-- 编写单元测试
-- 确保所有测试通过
-
----
-
-## 📄 许可证
-
-本项目采用 [APLv2](LICENSE) 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
----
-
-## 🔗 相关链接
-
-### 📺 视频教程
-- [YouTube 频道](https://www.youtube.com/channel/UCPW1wciGMIEh7CYOdLnsloA)
-
-### 🐛 问题反馈
-- [报告 Bug](https://github.com/Bomiot/Bomiot/issues/new?template=bug_report.md)
-- [功能请求](https://github.com/Bomiot/Bomiot/issues/new?template=feature_request.md)
-
-### 💬 社区
-- [GitHub Discussions](https://github.com/Bomiot/Bomiot/discussions)
-- [Issues](https://github.com/Bomiot/Bomiot/issues)
+Bomiot/
+├── awesomewms/                    # WMS 项目目录
+│   ├── language/                  # 国际化语言文件
+│   ├── media/                     # 静态资源与 Markdown 文档
+│   ├── templates/                 # 前端 (Quasar/Vue 3 SPA)
+│   │   └── src/
+│   │       ├── boot/              # Axios 配置、事件总线
+│   │       ├── components/        # 可复用组件
+│   │       │   ├── echarts/       # ECharts 图表组件
+│   │       │   ├── md/            # Markdown 渲染器
+│   │       │   ├── user/          # 用户/团队/部门管理组件
+│   │       │   └── wms/           # WMS 通用 CRUD 表格
+│   │       ├── i18n/              # 前端国际化翻译
+│   │       ├── layouts/           # 主布局（页头+菜单）
+│   │       ├── pages/             # 页面组件
+│   │       ├── router/            # Vue Router 路由配置
+│   │       └── stores/            # Pinia 状态管理
+│   ├── wmsapp/                    # WMS 后端应用
+│   │   ├── views.py               # 仪表板、ASN/DN 确认接口
+│   │   └── urls.py                # WMS 路由注册
+│   ├── bomiotconf.ini             # 项目标识
+│   ├── receiver.py                # 数据信号处理器
+│   └── setup.ini                  # 项目配置文件
+├── bomiot/server/                 # Bomiot 框架核心
+│   └── core/
+│       ├── models.py              # 数据模型定义
+│       ├── views.py               # 用户/团队/部门视图
+│       ├── urls.py                # 核心路由
+│       ├── function/              # WMS 各实体 CRUD 处理函数
+│       ├── client.py              # 服务器监控 API
+│       ├── page.py                # 分页器
+│       ├── jwt_auth.py            # JWT 认证
+│       └── auth.py                # 自定义认证后端
+├── seed_api.py                    # API 表初始化脚本
+├── seed_permissions.py            # 权限表初始化脚本
+└── deploy/                        # Docker 部署配置
+```
 
 ---
 
 <div align="center">
 
-**⭐ 如果这个项目对你有帮助，请给我们一个 Star！**
-
-Made with ❤️ by [Bomiot Team](https://github.com/Bomiot)
+**awesomewms - 全栈仓库管理系统**
 
 </div>

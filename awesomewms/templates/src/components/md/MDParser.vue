@@ -193,26 +193,8 @@ function mdDataChange() {
     },
     timestamp: new Date().getTime()
   }).then(res => {
-    if (!res.detail) {
-      get({
-        url: res,
-        params: {},
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        },
-        timestamp: new Date().getTime()
-      }).then(res => {
-        mdStore.mdDocsChange(res)
-        MDHtml()
-      }).catch(err => {
-        $q.loading.hide()
-        return Promise.reject(err)
-      })
-    } else {
-      $q.loading.hide()
-      return Promise.reject(new Error('Failed to load README file'))
-    }
+    mdStore.mdDocsChange(res)
+    MDHtml()
   }).catch(err => {
     $q.loading.hide()
     return Promise.reject(err)

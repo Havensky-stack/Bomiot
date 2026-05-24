@@ -127,7 +127,7 @@ function buildSearchParams() {
   if (!search.value) return '{}'
   const conditions = {}
   for (const f of props.searchFields) {
-    conditions[`data__${f}__icontains`] = search.value
+    conditions[`data__data__${f}__icontains`] = search.value
   }
   return JSON.stringify(conditions)
 }

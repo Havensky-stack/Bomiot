@@ -200,14 +200,14 @@ class UserSetTeam(viewsets.ModelViewSet):
                                                      "User not exists"))
         else:
             user_data = user_check.first()
-            if "Set Team For User" not in self.request.auth.permission:
-                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                         "User does not have permission to set team for user"))
-            else:
+            if self.request.auth.is_superuser is True or "Set Team For User" in self.request.auth.permission:
                 team_data = models.Team.objects.filter(id=int(data.get('team_id')), is_delete=False).first()
                 user_data.permission = team_data.permission if team_data else {}
                 user_data.team = int(data.get('team_id'))
                 user_data.save()
+            else:
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User does not have permission to set team for user"))
         return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                             "Success set team"), status=200)
 
@@ -235,12 +235,12 @@ class UserSetDepartment(viewsets.ModelViewSet):
                                                      "User not exists"))
         else:
             user_data = user_check.first()
-            if "Set Department For User" not in self.request.auth.permission:
-                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                         "User does not have permission to set department for user"))
-            else:
+            if self.request.auth.is_superuser is True or "Set Department For User" in self.request.auth.permission:
                 user_data.department = data.get('department_id')
                 user_data.save()
+            else:
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User does not have permission to set department for user"))
         return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                             "Success set department"), status=200)
 
@@ -271,27 +271,24 @@ class UserLock(viewsets.ModelViewSet):
             if user_data.is_superuser:
                 raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                                          "Can not lock admin"))
+            if self.request.auth.is_superuser is not True and "Lock & Unlock User" not in self.request.auth.permission:
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User does not have permission to lock user"))
+            if self.request.auth.id == int(data.get('id')):
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User can not lock/unlock your own"))
+            if user_data.is_active is True:
+                user_data.is_active = False
+                user_data.request_limit = 0
+                user_data.save()
+                return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                   "Success lock User"), status=200)
             else:
-                if "Lock & Unlock User" not in self.request.auth.permission:
-                    raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                             "User does not have permission to lock user"))
-                else:
-                    if self.request.auth.id == int(data.get('id')):
-                        raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                                 "User can not lock/unlock your own"))
-                    else:
-                        if user_data.is_active is True:
-                            user_data.is_active = False
-                            user_data.request_limit = 0
-                            user_data.save()
-                            return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                               "Success lock User"), status=200)
-                        else:
-                            user_data.is_active = True
-                            user_data.request_limit = 0
-                            user_data.save()
-                            return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                               "Success unlock User"), status=200)
+                user_data.is_active = True
+                user_data.request_limit = 0
+                user_data.save()
+                return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                   "Success unlock User"), status=200)
 
 
 class UserDelete(viewsets.ModelViewSet):
@@ -320,18 +317,15 @@ class UserDelete(viewsets.ModelViewSet):
             if user_data.is_superuser:
                 raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                                          "Can not delete admin"))
-            else:
-                if "Delete One User" not in self.request.auth.permission:
-                    raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                             "User does not have permission to delete user"))
-                else:
-                    if self.request.auth.id == int(data.get('id')):
-                        raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                                 "User can not delete your own"))
-                    else:
-                        user_data.is_delete = True
-                        return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
-                                                           "Success delete User"), status=200)
+            if self.request.auth.is_superuser is not True and "Delete One User" not in self.request.auth.permission:
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User does not have permission to delete user"))
+            if self.request.auth.id == int(data.get('id')):
+                raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                                         "User can not delete your own"))
+            user_data.is_delete = True
+            return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
+                                               "Success delete User"), status=200)
 
 
 class UserUpload(viewsets.ModelViewSet):
@@ -601,18 +595,17 @@ class TeamPermission(viewsets.ModelViewSet):
                                                      "Team not exists"))
         else:
             team_data = team_check.first()
-            if "Set Permission For Team" not in self.request.auth.permission:
+            if self.request.auth.is_superuser is not True and "Set Permission For Team" not in self.request.auth.permission:
                 raise APIException(detail_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                                          "User does not have permission to set permission for team"))
-            else:
-                permission_list = data.get('permission')
-                data_list = list(map(lambda data: self.get_permission_data(data), permission_list))
-                permission_data = reduce(lambda x, y: {**x, **y}, data_list)
-                team_data.permission = permission_data
-                User.objects.filter(team=team_data.id, is_delete=False).update(
-                    permission=permission_data
-                )
-                team_data.save()
+            permission_list = data.get('permission')
+            data_list = list(map(lambda data: self.get_permission_data(data), permission_list))
+            permission_data = reduce(lambda x, y: {**x, **y}, data_list)
+            team_data.permission = permission_data
+            User.objects.filter(team=team_data.id, is_delete=False).update(
+                permission=permission_data
+            )
+            team_data.save()
         return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                             "Success change team permission"), status=200)
 
@@ -814,3 +807,56 @@ class DepartmentDelete(viewsets.ModelViewSet):
                     models.Department.objects.filter(id=data.get('id')).update(is_delete=True)
         return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', ''),
                                            "Success delete department"), status=200)
+
+
+class APIList(viewsets.ModelViewSet):
+    """
+        list:
+            Response an API data list
+    """
+    pagination_class = APIPageNumberPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['id', 'method', 'api', 'func_name', 'name']
+    filter_class = filter.APIFilter
+    queryset = models.API.objects.filter(is_delete=False)
+
+    def get_serializer_class(self):
+        if self.action in ['list']:
+            return serializers.APISerializer
+        raise MethodNotAllowed(self.request.method)
+
+    def list(self, request, *args, **kwargs):
+        search = self.request.query_params.get('search', '')
+        qs = self.get_queryset()
+        if search:
+            qs = qs.filter(Q(api__icontains=search) | Q(name__icontains=search) | Q(func_name__icontains=search))
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
+
+class APIChange(viewsets.ModelViewSet):
+    """
+    Change API func_name
+    """
+    queryset = models.API.objects.filter(is_delete=False)
+
+    def get_serializer_class(self):
+        return serializers.APISerializer
+
+    def create(self, request, *args, **kwargs):
+        data = self.request.data
+        api_id = data.get('id')
+        func_name = data.get('func_name', '')
+        if not api_id:
+            return Response(detail_message_return(self.request.META.get('HTTP_LANGUAGE', 'en-US'),
+                                                  "API id is required"))
+        updated = models.API.objects.filter(id=api_id, is_delete=False).update(func_name=func_name)
+        if updated:
+            return Response(msg_message_return(self.request.META.get('HTTP_LANGUAGE', 'en-US'),
+                                               "API updated successfully"))
+        return Response(detail_message_return(self.request.META.get('HTTP_LANGUAGE', 'en-US'),
+                                              "API not found"))

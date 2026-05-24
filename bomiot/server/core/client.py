@@ -27,7 +27,9 @@ class PIDList(viewsets.ModelViewSet):
         if self.request.user:
             query_data = {}
             query_data['is_delete'] = False
-            query_data['name__icontains'] = self.request.query_params.get('search')
+            search_val = self.request.query_params.get('search')
+            if search_val:
+                query_data['name__icontains'] = search_val
             return models.Pids.objects.filter(**query_data).order_by('-memory_usage', '-cpu_usage')
         else:
             return models.Pids.objects.none()

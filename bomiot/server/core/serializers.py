@@ -23,6 +23,24 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class APISerializer(serializers.ModelSerializer):
+    """
+    API Serializer
+    """
+    method = serializers.CharField(read_only=True, required=False)
+    api = serializers.CharField(read_only=True, required=False)
+    func_name = serializers.CharField(read_only=True, required=False)
+    name = serializers.CharField(read_only=True, required=False)
+    is_delete = serializers.BooleanField(read_only=True, required=False)
+    created_time = serializers.DateTimeField(read_only=True, required=False, format='%Y-%m-%d %H:%M:%S')
+    updated_time = serializers.DateTimeField(read_only=True, required=False, format='%Y-%m-%d %H:%M:%S')
+
+    class Meta:
+        model = models.API
+        fields = ['id', 'method', 'api', 'func_name', 'name', 'is_delete', 'created_time', 'updated_time']
+        read_only_fields = ['id']
+
+
 class PermissionSerializer(serializers.ModelSerializer):
     """
     Permission Serializer

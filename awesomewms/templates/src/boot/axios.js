@@ -6,7 +6,7 @@ import { LocalStorage, Notify, Loading } from 'quasar';
 const baseURL = 'http://127.0.0.1:8000' // Replace with your actual API URL
 
 const api = axios.create({
-  // baseURL: baseURL
+  baseURL: baseURL
 })
 
 class RequestThrottler {
