@@ -2,6 +2,9 @@
 import os
 import sys
 
+# Ensure local project code takes precedence over installed packages
+sys.path.insert(0, os.getcwd())
+
 
 def manage():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bomiot.server.server.settings')

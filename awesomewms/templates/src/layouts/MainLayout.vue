@@ -8,7 +8,7 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" v-show="leftDrawerStore.leftDrawerMenu" @click="leftDrawerStore.toggleleftDrawer" />
         <q-toolbar-title @click="$router.push('/')">
-          <q-avatar>
+          <q-avatar size="60px">
             <img src="/icons/logo.png" :alt="appNameStore.appName + ' Logo'" />
           </q-avatar>
             {{ appNameStore.appName }}©

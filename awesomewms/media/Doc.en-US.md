@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="media/img/logo.png" alt="awesomewms logo" width="200" height="auto" />
+  <img src="media/img/logo.png" alt="awesomewms logo" width="300" height="auto" />
   <h1>awesomewms - System Documentation</h1>
   <p><strong>Full-Stack Warehouse Management System — Complete User Manual</strong></p>
 </div>

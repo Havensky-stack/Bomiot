@@ -151,7 +151,7 @@ def favicon(request):
         else:
             path = join(settings.WORKING_SPACE, project_name, 'media', 'img', 'logo.png')
     resp = FileResponse(open(path, 'rb'))
-    resp['Cache-Control'] = 'max-age=864000000000'
+    resp['Cache-Control'] = 'max-age=3600'
     return resp
 
 def statics(request):
@@ -166,14 +166,14 @@ def statics(request):
     path = join(base_dir, request.path_info.lstrip('/'))
     if exists(path) and isfile(path):
         resp = FileResponse(open(path, 'rb'))
-        resp['Cache-Control'] = 'max-age=864000000000'
+        resp['Cache-Control'] = 'max-age=3600'
         return resp
     pattern = join(base_dir, '**', 'index-*.js')
     index_js_files = glob.glob(pattern, recursive=True)
     if index_js_files:
         fallback_path = index_js_files[0]
         resp = FileResponse(open(fallback_path, 'rb'))
-        resp['Cache-Control'] = 'max-age=864000000000'
+        resp['Cache-Control'] = 'max-age=3600'
         return resp
 
 async def google(request):
