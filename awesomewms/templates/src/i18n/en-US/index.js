@@ -4,8 +4,8 @@
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
-  title: 'GreaterWMS Open Source Warehouse Management System',
-  description: 'GreaterWMS Open Source Warehouse Management System',
+  title: 'Open Source Warehouse Management System',
+  description: 'Open Source Warehouse Management System',
   keywords: 'greaterwms, 聚商汇wms,wms-system,open source wms system,开源wms,开源仓库管理软件,warehouse management system, free wms',
   expireNotice: `The authorization key will expire in {days} days. Please use 'bomiot keys' to retrieve a new authorization key`,
   expired: "The authorization key has expired. Please use 'bomiot keys' to retrieve a new authorization key",

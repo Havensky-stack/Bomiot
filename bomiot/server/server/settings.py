@@ -262,7 +262,7 @@ else:
 if exists(join(WORKING_SPACE, PROJECT_NAME)):
     exists(LANGUAGE_DIR) or os.makedirs(LANGUAGE_DIR)
 
-TIME_ZONE = CONFIG.getint('local', 'time_zone', fallback='UTC')
+TIME_ZONE = CONFIG.get('locale', 'time_zone', fallback='UTC')
 
 USE_I18N = True
 
