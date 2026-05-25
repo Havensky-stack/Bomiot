@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # ============================================================
-#  Bomiot WMS — Linux One-Click Deploy
+#  Awesome WMS — Linux 一键部署脚本
 #
-#  Usage: bash deploy_linux.sh
+#  用法: bash deploy_linux.sh
 #
-#  What it does:
-#  1. Checks for Docker and installs if missing
-#  2. Detects whether you are in China → auto-selects mirrors
-#  3. Clones the project and starts docker compose
+#  脚本会自动完成以下操作：
+#  1. 检测并安装 Docker
+#  2. 检测是否在中国大陆 → 自动切换国内镜像源
+#  3. 克隆项目并启动部署
 # ============================================================
 set -e
 
@@ -21,7 +21,7 @@ REPO_URL="https://github.com/Havensky-stack/Bomiot.git"
 PROJECT_DIR="$HOME/bomiot-wms"
 
 # ------------------------------------------------------------------
-# 1. Detect distro
+# 1. 检测 Linux 发行版
 # ------------------------------------------------------------------
 detect_distro() {
     if [ -f /etc/os-release ]; then
@@ -33,20 +33,20 @@ detect_distro() {
 }
 
 # ------------------------------------------------------------------
-# 2. Check Docker
+# 2. 检测并安装 Docker
 # ------------------------------------------------------------------
 check_docker() {
     if command -v docker &>/dev/null && docker info &>/dev/null 2>&1; then
-        echo -e "${GREEN}[OK]${NC} Docker is installed and running"
+        echo -e "${GREEN}[正常]${NC} Docker 已安装并运行中"
         return 0
     fi
 
-    echo -e "${YELLOW}[!]${NC} Docker is not installed or not running."
+    echo -e "${YELLOW}[提示]${NC} Docker 未安装或未启动。"
     echo ""
-    echo "  Install Docker now? [Y/n]"
+    echo "  是否现在安装 Docker？[Y/n]"
     read -r ANSWER
     if [[ "$ANSWER" =~ ^[Nn] ]]; then
-        echo "Please install Docker manually and re-run this script."
+        echo "请手动安装 Docker 后重新运行此脚本。"
         exit 1
     fi
 
@@ -55,7 +55,7 @@ check_docker() {
 
 install_docker() {
     detect_distro
-    echo -e "${CYAN}Installing Docker for $DISTRO ...${NC}"
+    echo -e "${CYAN}正在为 $DISTRO 安装 Docker ...${NC}"
 
     case "$DISTRO" in
         ubuntu|debian)
@@ -81,49 +81,44 @@ install_docker() {
             sudo systemctl enable docker
             ;;
         *)
-            echo -e "${RED}Cannot auto-install Docker for '$DISTRO'.${NC}"
-            echo "Please install Docker manually: https://docs.docker.com/engine/install/"
+            echo -e "${RED}无法为 '$DISTRO' 自动安装 Docker。${NC}"
+            echo "请手动安装: https://docs.docker.com/engine/install/"
             exit 1
             ;;
     esac
 
-    # Add user to docker group
     sudo usermod -aG docker "$USER" 2>/dev/null || true
+    echo -e "${GREEN}[完成]${NC} Docker 安装完成。如提示权限不足，请注销后重新登录。"
 
-    echo -e "${GREEN}[OK]${NC} Docker installed. You may need to log out and back in for group changes to take effect."
-    echo ""
-
-    # If dockerd is not running, start it
     if ! docker info &>/dev/null 2>&1; then
         sudo systemctl start docker 2>/dev/null || true
     fi
 }
 
 # ------------------------------------------------------------------
-# 3. Detect if in China
+# 3. 检测网络环境（国内/国外）
 # ------------------------------------------------------------------
 detect_cn() {
-    echo -e "${CYAN}Detecting network environment ...${NC}"
-    # Try Docker Hub — if unreachable, assume China
+    echo -e "${CYAN}正在检测网络环境 ...${NC}"
     if curl -s --connect-timeout 3 https://registry-1.docker.io/v2/ > /dev/null 2>&1; then
-        echo -e "${GREEN}[OK]${NC} Docker Hub reachable → using international mirrors"
+        echo -e "${GREEN}[正常]${NC} Docker Hub 可访问 → 使用国际镜像源"
         USE_CN=false
     else
-        echo -e "${YELLOW}[CN]${NC} Docker Hub unreachable → using China mirrors"
+        echo -e "${YELLOW}[国内]${NC} Docker Hub 不可访问 → 使用国内镜像源（阿里云）"
         USE_CN=true
     fi
 }
 
 # ------------------------------------------------------------------
-# 4. Clone and deploy
+# 4. 克隆项目并部署
 # ------------------------------------------------------------------
 deploy() {
     if [ -d "$PROJECT_DIR" ]; then
-        echo -e "${YELLOW}Project directory $PROJECT_DIR already exists.${NC}"
-        echo "  [1] Update (git pull)"
-        echo "  [2] Remove and re-clone"
-        echo "  [3] Skip clone, just start"
-        read -r -p "Choice [1]: " CHOICE
+        echo -e "${YELLOW}项目目录 $PROJECT_DIR 已存在。${NC}"
+        echo "  [1] 更新 (git pull)"
+        echo "  [2] 删除并重新克隆"
+        echo "  [3] 跳过克隆，直接启动"
+        read -r -p "请选择 [1]: " CHOICE
         case "${CHOICE:-1}" in
             2) rm -rf "$PROJECT_DIR"
                git clone --depth 1 "$REPO_URL" "$PROJECT_DIR" ;;
@@ -131,7 +126,7 @@ deploy() {
             *) cd "$PROJECT_DIR" && git pull ;;
         esac
     else
-        echo -e "${CYAN}Cloning project ...${NC}"
+        echo -e "${CYAN}正在克隆项目 ...${NC}"
         git clone --depth 1 "$REPO_URL" "$PROJECT_DIR"
     fi
 
@@ -144,26 +139,26 @@ deploy() {
     fi
 
     echo ""
-    echo -e "${CYAN}Starting services (compose file: $COMPOSE_FILE) ...${NC}"
+    echo -e "${CYAN}正在启动服务（配置文件: $COMPOSE_FILE）...${NC}"
     docker compose -f "$COMPOSE_FILE" up -d --build
 
     echo ""
     echo -e "${GREEN}============================================${NC}"
-    echo -e "${GREEN}  Deploy complete!${NC}"
-    echo -e "  URL:  ${CYAN}http://localhost:8000${NC}"
-    echo -e "  Admin login: ${CYAN}admin${NC} / ${CYAN}admin123${NC}"
+    echo -e "${GREEN}  部署完成！${NC}"
+    echo -e "  访问地址:  ${CYAN}http://localhost:8000${NC}"
+    echo -e "  管理员账号: ${CYAN}admin${NC} / ${CYAN}admin123${NC}"
     echo ""
-    echo -e "  View logs:   docker compose -f $COMPOSE_FILE logs -f"
-    echo -e "  Stop:        docker compose -f $COMPOSE_FILE down"
+    echo -e "  查看日志:   docker compose -f $COMPOSE_FILE logs -f"
+    echo -e "  停止服务:   docker compose -f $COMPOSE_FILE down"
     echo -e "${GREEN}============================================${NC}"
 }
 
 # ------------------------------------------------------------------
-# Main
+# 主流程
 # ------------------------------------------------------------------
 echo ""
 echo -e "${GREEN}============================================${NC}"
-echo -e "${GREEN}  Bomiot WMS — Linux One-Click Deploy${NC}"
+echo -e "${GREEN}  Awesome WMS — Linux 一键部署${NC}"
 echo -e "${GREEN}============================================${NC}"
 echo ""
 
