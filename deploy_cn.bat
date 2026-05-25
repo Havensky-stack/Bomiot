@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 REM =============================================
 REM WMS System - China Edition Docker Deploy (Windows)
 REM Usage: deploy_cn.bat [up|down|logs|restart]
