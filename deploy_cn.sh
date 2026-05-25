@@ -50,7 +50,10 @@ case "${1:-up}" in
     up)
         check_docker_mirror
         echo -e "${GREEN}启动服务...${NC}"
-        docker compose -f "$COMPOSE_FILE" up -d --build
+        docker compose -f "$COMPOSE_FILE" up -d --build || {
+            echo -e "${RED}构建失败，请检查上面的错误信息${NC}"
+            exit 1
+        }
         echo ""
         echo -e "${GREEN}部署完成!${NC}"
         echo "访问地址: http://localhost:${PORT:-80}"

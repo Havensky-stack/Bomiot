@@ -37,10 +37,15 @@ RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debia
 COPY requirements.txt .
 
 # Use Aliyun PyPI mirror
+# Install hashed requirements first, then extra packages (to avoid --require-hashes conflict)
 RUN pip install --no-cache-dir \
     -i https://mirrors.aliyun.com/pypi/simple/ \
     --trusted-host mirrors.aliyun.com \
-    -r requirements.txt mysqlclient gunicorn whitenoise
+    -r requirements.txt \
+    && pip install --no-cache-dir \
+    -i https://mirrors.aliyun.com/pypi/simple/ \
+    --trusted-host mirrors.aliyun.com \
+    mysqlclient gunicorn whitenoise
 
 COPY . .
 

@@ -18,6 +18,11 @@ if /I "%CMD%"=="up" (
     echo   文档: https://help.aliyun.com/document_detail/60750.html
     echo.
     docker compose -f %COMPOSE_FILE% up -d --build
+    if errorlevel 1 (
+        echo.
+        echo 构建失败，请检查上面的错误信息
+        exit /b 1
+    )
     echo.
     echo 部署完成! 访问 http://localhost
     echo 查看日志: deploy_cn.bat logs
