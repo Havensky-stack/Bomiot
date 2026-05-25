@@ -1,0 +1,55 @@
+# =============================================
+# Stage 1: Build frontend (China mirrors)
+# =============================================
+FROM node:20-alpine AS frontend-builder
+
+WORKDIR /frontend
+COPY awesomewms/templates/package.json awesomewms/templates/yarn.lock ./
+
+# Use npmmirror (Taobao mirror) for faster installs in China
+RUN yarn config set registry https://registry.npmmirror.com && \
+    yarn install --frozen-lockfile
+
+COPY awesomewms/templates/ .
+RUN yarn build
+
+# =============================================
+# Stage 2: Production backend (China mirrors)
+# =============================================
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=bomiot.server.server.settings
+
+# Replace Debian sources with Tsinghua mirror
+RUN sed -i 's|deb.debian.org|mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    default-libmysqlclient-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+# Use Tsinghua PyPI mirror
+RUN pip install --no-cache-dir \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    -r requirements.txt mysqlclient gunicorn whitenoise
+
+COPY . .
+
+COPY --from=frontend-builder /frontend/dist/spa awesomewms/templates/dist/spa
+
+RUN mkdir -p dbs logs bomiot_static
+
+RUN python bomiot/server/manage.py collectstatic --noinput 2>/dev/null || true
+
+EXPOSE 8000
+
+COPY deploy/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]

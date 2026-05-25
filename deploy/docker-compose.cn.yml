@@ -1,0 +1,84 @@
+# =============================================
+# China Edition - Docker Compose
+#
+# 部署前请先配置 Docker 镜像加速器:
+#
+#   sudo mkdir -p /etc/docker
+#   sudo tee /etc/docker/daemon.json <<'EOF'
+#   {
+#     "registry-mirrors": [
+#       "https://docker.1ms.run",
+#       "https://docker.xuanyuan.me"
+#     ]
+#   }
+#   EOF
+#   sudo systemctl daemon-reload
+#   sudo systemctl restart docker
+#
+# 然后运行: bash deploy_cn.sh up
+# =============================================
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: wms-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wms}
+      MYSQL_USER: ${MYSQL_USER:-wms_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wms_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cn
+    container_name: wms-web
+    expose:
+      - "8000"
+    volumes:
+      - ../logs:/app/logs
+      - media_data:/app/awesomewms/media
+    environment:
+      - DB_ENGINE=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=${MYSQL_DATABASE:-wms}
+      - DB_USER=root
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD:-root123}
+      - DJANGO_SETTINGS_MODULE=bomiot.server.server.settings
+      - DEBUG=False
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - IS_LAN=true
+      - WORKERS=1
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: wms-nginx
+    ports:
+      - "${PORT:-80}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  media_data:

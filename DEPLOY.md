@@ -250,6 +250,8 @@ ls
 
 ## 方式A：Docker 一键部署（推荐，最简单）
 
+> **中国用户注意**：如果你在大陆地区，Docker Hub、PyPI、npm 默认源可能很慢或无法访问。我们提供了中国特供版脚本，使用国内镜像加速。详见下方「中国用户特供版」章节。
+
 ### A1. 什么是 Docker（用人话解释）
 
 如果你还不了解 Docker，花 2 分钟看一下这个解释：
@@ -617,6 +619,84 @@ ghi789jkl012   mysql:8.0      Up 2 minutes    3306/tcp              wms-mysql
 5. 登录成功后进入系统首页（仪表板），可以看到 KPI 卡片和菜单
 
 > **安全提醒：** 登录后建议第一时间修改默认密码：左侧菜单 → 右上角头像 → 修改密码。
+
+---
+
+## 中国用户特供版
+
+如果你在中国大陆，Docker Hub、PyPI、npm 等默认源非常慢甚至无法连接。我们专门提供了使用国内镜像的脚本。
+
+### Docker 部署（推荐）
+
+**第一步：配置 Docker 镜像加速器**
+
+```bash
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<'EOF'
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.xuanyuan.me"
+  ]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+**第二步：使用中国特供版脚本部署**
+
+```bash
+# Linux / macOS
+bash deploy_cn.sh up
+
+# Windows
+deploy_cn.bat up
+```
+
+这个脚本会自动检测你是否配置了 Docker 镜像加速，并给出提示。
+
+所用到的中国特供版文件：
+
+- `deploy/Dockerfile.cn` — 构建时使用清华 apt 源、清华 PyPI 源、淘宝 npm 源
+- `deploy/docker-compose.cn.yml` — 引用 Dockerfile.cn
+- `deploy_cn.sh` / `deploy_cn.bat` — 一键启动脚本
+
+### 本地部署（Linux）
+
+```bash
+bash scripts/deploy_linux_cn.sh
+```
+
+这个脚本会自动：
+
+- npm 设置为淘宝镜像 (`registry.npmmirror.com`)
+- pip 设置为清华源 (`pypi.tuna.tsinghua.edu.cn`)
+
+### 本地部署（已有 conda 环境）
+
+```bash
+bash setup_local_cn.sh
+```
+
+### 各镜像源说明
+
+| 用途 | 默认源 | 中国镜像 |
+|------|--------|----------|
+| Docker Hub | `docker.io` | 通过 daemon.json 配置 |
+| PyPI (pip) | `pypi.org` | `https://pypi.tuna.tsinghua.edu.cn/simple` |
+| npm | `registry.npmjs.org` | `https://registry.npmmirror.com` |
+| apt (Debian) | `deb.debian.org` | `mirrors.tuna.tsinghua.edu.cn` |
+
+### 手动配置镜像（如果你已有环境）
+
+```bash
+# pip 清华源（永久生效）
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# npm 淘宝镜像（永久生效）
+npm config set registry https://registry.npmmirror.com
+```
 
 ---
 
