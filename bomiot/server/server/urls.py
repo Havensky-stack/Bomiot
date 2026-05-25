@@ -1,6 +1,7 @@
 import importlib.metadata
 import importlib.util
 import os
+import sys
 from os import listdir
 from os.path import join, isdir, exists, isfile
 from django.contrib import admin
@@ -128,8 +129,13 @@ if len(filtered_current_path) > 0:
                         traceback.print_exc()
                         continue
 
-if os.environ.get('IS_LAN', 'false') == 'true':
+# Only run init/bootstrap in production (non-management-command) mode
+_is_management_command = any(cmd in sys.argv for cmd in ['migrate', 'makemigrations', 'collectstatic', 'shell', 'showmigrations', 'sqlmigrate', 'dbshell', 'createsuperuser'])
+
+if os.environ.get('IS_LAN', 'false') == 'true' and not _is_management_command:
     views.init_bomiot()
     start_monitoring()
-    sm.start()
-    ob.start()
+    if sm is not None:
+        sm.start()
+    if ob is not None:
+        ob.start()
