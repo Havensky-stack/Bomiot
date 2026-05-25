@@ -13,7 +13,7 @@ NC='\033[0m'
 
 cd "$(dirname "$0")"
 
-PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+PIP_MIRROR="https://mirrors.aliyun.com/pypi/simple/"
 NPM_MIRROR="https://registry.npmmirror.com"
 
 echo -e "${GREEN}========================================${NC}"

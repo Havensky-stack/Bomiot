@@ -16,7 +16,7 @@ PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
 # ---------- China mirrors ----------
-PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+PIP_MIRROR="https://mirrors.aliyun.com/pypi/simple/"
 NPM_MIRROR="https://registry.npmmirror.com"
 
 log_info()  { echo -e "${GREEN}[INFO]${NC}  $1"; }

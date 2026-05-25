@@ -658,7 +658,7 @@ deploy_cn.bat up
 
 所用到的中国特供版文件：
 
-- `deploy/Dockerfile.cn` — 构建时使用清华 apt 源、清华 PyPI 源、淘宝 npm 源
+- `deploy/Dockerfile.cn` — 构建时使用阿里云 apt 源、阿里云 PyPI 源、淘宝 npm 源
 - `deploy/docker-compose.cn.yml` — 引用 Dockerfile.cn
 - `deploy_cn.sh` / `deploy_cn.bat` — 一键启动脚本
 
@@ -671,7 +671,7 @@ bash scripts/deploy_linux_cn.sh
 这个脚本会自动：
 
 - npm 设置为淘宝镜像 (`registry.npmmirror.com`)
-- pip 设置为清华源 (`pypi.tuna.tsinghua.edu.cn`)
+- pip 设置为阿里云源 (`mirrors.aliyun.com`)
 
 ### 本地部署（已有 conda 环境）
 
@@ -684,15 +684,15 @@ bash setup_local_cn.sh
 | 用途 | 默认源 | 中国镜像 |
 |------|--------|----------|
 | Docker Hub | `docker.io` | 通过 daemon.json 配置 |
-| PyPI (pip) | `pypi.org` | `https://pypi.tuna.tsinghua.edu.cn/simple` |
+| PyPI (pip) | `pypi.org` | `https://mirrors.aliyun.com/simple` |
 | npm | `registry.npmjs.org` | `https://registry.npmmirror.com` |
-| apt (Debian) | `deb.debian.org` | `mirrors.tuna.tsinghua.edu.cn` |
+| apt (Debian) | `deb.debian.org` | `mirrors.aliyun.com` |
 
 ### 手动配置镜像（如果你已有环境）
 
 ```bash
-# pip 清华源（永久生效）
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# pip 阿里云源（永久生效）
+pip config set global.index-url https://mirrors.aliyun.com/simple
 
 # npm 淘宝镜像（永久生效）
 npm config set registry https://registry.npmmirror.com
