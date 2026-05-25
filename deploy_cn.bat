@@ -9,7 +9,7 @@ cd /d "%~dp0"
 
 set COMPOSE_FILE=deploy/docker-compose.cn.yml
 
-if "%1"=="" set "CMD=up" else set "CMD=%1"
+if "%~1"=="" (set "CMD=up") else (set "CMD=%~1")
 
 if /I "%CMD%"=="up" (
     echo.
@@ -20,15 +20,25 @@ if /I "%CMD%"=="up" (
     echo.
     echo 部署完成! 访问 http://localhost
     echo 查看日志: deploy_cn.bat logs
-) else if /I "%CMD%"=="down" (
+    goto :eof
+)
+
+if /I "%CMD%"=="down" (
     docker compose -f %COMPOSE_FILE% down
     echo 服务已停止
-) else if /I "%CMD%"=="logs" (
+    goto :eof
+)
+
+if /I "%CMD%"=="logs" (
     docker compose -f %COMPOSE_FILE% logs -f
-) else if /I "%CMD%"=="restart" (
+    goto :eof
+)
+
+if /I "%CMD%"=="restart" (
     docker compose -f %COMPOSE_FILE% restart
     echo 服务已重启
-) else (
-    echo Usage: deploy_cn.bat [up^|down^|logs^|restart]
-    exit /b 1
+    goto :eof
 )
+
+echo Usage: deploy_cn.bat [up^|down^|logs^|restart]
+exit /b 1
