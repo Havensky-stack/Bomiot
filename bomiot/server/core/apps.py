@@ -29,8 +29,10 @@ class CoreConfig(AppConfig):
                     from bomiot.server.server.views import init_permission
                     from bomiot.server.core.signal import bomiot_signals, bomiot_data_signals
                     start_monitoring()
-                    sm.start()
-                    ob.start()
+                    if sm is not None:
+                        sm.start()
+                    if ob is not None:
+                        ob.start()
                     # def backgrun_init():
                     #     init_permission()
                     # init_thread = threading.Thread(target=backgrun_init, daemon=True)

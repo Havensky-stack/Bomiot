@@ -1,4 +1,5 @@
 import inspect
+import sys
 import time
 from threading import Thread, Lock
 import json
@@ -41,7 +42,12 @@ class SchedulerManager(Thread):
         self._stop_event = False
         register_events(self.scheduler)
         self.daemon = True
-        JobList.objects.filter().delete()
+        # Skip DB operations during management commands (migrate, etc.)
+        if not any(cmd in sys.argv for cmd in ['migrate', 'makemigrations', 'collectstatic', 'shell', 'showmigrations', 'sqlmigrate', 'dbshell']):
+            try:
+                JobList.objects.filter().delete()
+            except Exception as e:
+                print(f"[Scheduler] Warning: Could not clear job list: {e}")
         self.scheduler.start()
     
     def get_existing_jobs(self):
@@ -124,5 +130,14 @@ class SchedulerManager(Thread):
         print("Scheduler manager stopped")
 
 
-# init scheduler manager
-sm = SchedulerManager(scheduler)
+# init scheduler manager (only when not running management commands)
+_is_management_command = any(cmd in sys.argv for cmd in ['migrate', 'makemigrations', 'collectstatic', 'shell', 'showmigrations', 'sqlmigrate', 'dbshell', 'createsuperuser'])
+
+if _is_management_command:
+    sm = None
+else:
+    try:
+        sm = SchedulerManager(scheduler)
+    except Exception as e:
+        print(f"[Scheduler] Warning: Could not start scheduler manager: {e}")
+        sm = None
