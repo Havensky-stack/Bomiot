@@ -96,15 +96,18 @@ install_docker() {
 }
 
 # ------------------------------------------------------------------
-# 3. 检测网络环境（国内/国外）
+# 3. 选择镜像源
 # ------------------------------------------------------------------
-detect_cn() {
-    echo -e "${CYAN}正在检测网络环境 ...${NC}"
-    if curl -s --connect-timeout 3 https://registry-1.docker.io/v2/ > /dev/null 2>&1; then
-        echo -e "${GREEN}[正常]${NC} Docker Hub 可访问 → 使用国际镜像源"
+choose_cn() {
+    echo -e "${YELLOW}是否在中国大陆使用国内镜像源？${NC}"
+    echo "  [Y] 是，使用国内镜像（阿里云）"
+    echo "  [N] 否，使用国际镜像（Docker Hub）"
+    read -r -p "请选择 [Y]: " CN_CHOICE
+    if [[ "$CN_CHOICE" =~ ^[Nn] ]]; then
+        echo -e "${GREEN}[OK]${NC} 使用国际镜像源"
         USE_CN=false
     else
-        echo -e "${YELLOW}[国内]${NC} Docker Hub 不可访问 → 使用国内镜像源（阿里云）"
+        echo -e "${GREEN}[OK]${NC} 使用国内镜像源（阿里云）"
         USE_CN=true
     fi
 }
@@ -163,5 +166,5 @@ echo -e "${GREEN}============================================${NC}"
 echo ""
 
 check_docker
-detect_cn
+choose_cn
 deploy

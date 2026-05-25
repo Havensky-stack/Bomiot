@@ -1,57 +1,57 @@
-ï»¿@echo off
+@echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
 set PROJECT_DIR=%USERPROFILE%\bomiot-wms
 
 echo.
-echo   Awesome WMS - Windows ä¸€é”®å¸è½½
+echo   Awesome WMS - Windows Ò»¼üĞ¶ÔØ
 echo.
 
-REM --- åœæ­¢ Docker å®¹å™¨ ---
+REM --- Í£Ö¹ Docker ÈİÆ÷ ---
 if not exist "%PROJECT_DIR%" goto :no_project
 
 cd /d "%PROJECT_DIR%"
 for %%F in ("deploy\docker-compose.cn.yml" "deploy\docker-compose.yml") do (
     if exist %%F (
-        echo æ­£åœ¨åœæ­¢ Docker å®¹å™¨...
+        echo ÕıÔÚÍ£Ö¹ Docker ÈİÆ÷...
         docker compose -f %%F down -v 2>/dev/null
         goto :remove_files
     )
 )
 
 :no_project
-echo [æç¤º] é¡¹ç›®ç›®å½•ä¸å­˜åœ¨: %PROJECT_DIR%
+echo [ÌáÊ¾] ÏîÄ¿Ä¿Â¼²»´æÔÚ: %PROJECT_DIR%
 goto :ask_docker
 
-REM --- åˆ é™¤é¡¹ç›®æ–‡ä»¶ ---
+REM --- É¾³ıÏîÄ¿ÎÄ¼ş ---
 :remove_files
 echo.
-echo å³å°†åˆ é™¤: %PROJECT_DIR%
-choice /c YN /n /m "ç¡®è®¤åˆ é™¤ï¼Ÿ[Y/N]: "
+echo ¼´½«É¾³ı: %PROJECT_DIR%
+choice /c YN /n /m "È·ÈÏÉ¾³ı£¿[Y/N]: "
 if !errorlevel! equ 2 (
-    echo å·²è·³è¿‡åˆ é™¤é¡¹ç›®æ–‡ä»¶
+    echo ÒÑÌø¹ıÉ¾³ıÏîÄ¿ÎÄ¼ş
 ) else (
     rmdir /s /q "%PROJECT_DIR%"
-    echo [å®Œæˆ] é¡¹ç›®æ–‡ä»¶å·²åˆ é™¤
+    echo [Íê³É] ÏîÄ¿ÎÄ¼şÒÑÉ¾³ı
 )
 
 REM --- Docker Desktop ---
 :ask_docker
 echo.
-echo æ˜¯å¦å¸è½½ Docker Desktopï¼Ÿ
-echo   éœ€è¦ä» Windows è®¾ç½®ä¸­æ‰‹åŠ¨å¸è½½ã€‚
-echo   Docker æ•°æ®ä¸ä¼šè‡ªåŠ¨åˆ é™¤ã€‚
+echo ÊÇ·ñĞ¶ÔØ Docker Desktop£¿
+echo   ĞèÒª´Ó Windows ÉèÖÃÖĞÊÖ¶¯Ğ¶ÔØ¡£
+echo   Docker Êı¾İ²»»á×Ô¶¯É¾³ı¡£
 echo.
-choice /c YN /n /m "å‡†å¤‡å¸è½½ï¼Ÿ[Y/N]: "
+choice /c YN /n /m "×¼±¸Ğ¶ÔØ£¿[Y/N]: "
 if !errorlevel! equ 2 goto :check_wsl
 
 echo.
-echo æ‰‹åŠ¨å¸è½½ Docker Desktop æ­¥éª¤ï¼š
-echo   1. æ‰“å¼€ Windows è®¾ç½® - åº”ç”¨ - å·²å®‰è£…çš„åº”ç”¨
-echo   2. æœç´¢ Docker Desktop å¹¶ç‚¹å‡»å¸è½½
+echo ÊÖ¶¯Ğ¶ÔØ Docker Desktop ²½Öè£º
+echo   1. ´ò¿ª Windows ÉèÖÃ - Ó¦ÓÃ - ÒÑ°²×°µÄÓ¦ÓÃ
+echo   2. ËÑË÷ Docker Desktop ²¢µã»÷Ğ¶ÔØ
 echo.
-echo åŒæ—¶å»ºè®®åˆ é™¤ä»¥ä¸‹ç›®å½•ï¼ˆå¦‚å­˜åœ¨ï¼‰ï¼š
+echo Í¬Ê±½¨ÒéÉ¾³ıÒÔÏÂÄ¿Â¼£¨Èç´æÔÚ£©£º
 echo   %%USERPROFILE%%\.docker
 echo   %%APPDATA%%\Docker
 echo   %%LOCALAPPDATA%%\Docker
@@ -62,27 +62,27 @@ REM --- WSL ---
 wsl --status >/dev/null 2>&1
 if %errorlevel% neq 0 goto :done
 
-echo æ˜¯å¦å¸è½½ WSL - Windows Subsystem for Linuxï¼Ÿ
-echo   æ­¤æ“ä½œä¼šåˆ é™¤æ‰€æœ‰ WSL å‘è¡Œç‰ˆå’Œæ•°æ®ã€‚
-echo   [Y] æ˜¯ï¼Œå¸è½½ WSL
-echo   [N] å¦ï¼Œä¿ç•™ WSL - å…¶ä»–åº”ç”¨å¯èƒ½ä¾èµ–å®ƒ
+echo ÊÇ·ñĞ¶ÔØ WSL - Windows Subsystem for Linux£¿
+echo   ´Ë²Ù×÷»áÉ¾³ıËùÓĞ WSL ·¢ĞĞ°æºÍÊı¾İ¡£
+echo   [Y] ÊÇ£¬Ğ¶ÔØ WSL
+echo   [N] ·ñ£¬±£Áô WSL - ÆäËûÓ¦ÓÃ¿ÉÄÜÒÀÀµËü
 choice /c YN /n
 if !errorlevel! equ 2 (
-    echo å·²è·³è¿‡å¸è½½ WSL
+    echo ÒÑÌø¹ıĞ¶ÔØ WSL
     goto :done
 )
 
 echo.
-echo æ­£åœ¨åˆ é™¤ WSL å‘è¡Œç‰ˆ...
+echo ÕıÔÚÉ¾³ı WSL ·¢ĞĞ°æ...
 wsl --unregister docker-desktop-data 2>/dev/null
 wsl --unregister docker-desktop 2>/dev/null
-echo [å®Œæˆ] WSL å‘è¡Œç‰ˆå·²åˆ é™¤
+echo [Íê³É] WSL ·¢ĞĞ°æÒÑÉ¾³ı
 echo.
-echo å¦‚éœ€å®Œå…¨ç§»é™¤ WSLï¼Œè¯·åœ¨ PowerShell ä¸­ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œï¼š
+echo ÈçĞèÍêÈ«ÒÆ³ı WSL£¬ÇëÔÚ PowerShell ÖĞÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ£º
 echo   Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 
 :done
 echo.
-echo   å¸è½½å®Œæˆã€‚
+echo   Ğ¶ÔØÍê³É¡£
 echo.
 pause
