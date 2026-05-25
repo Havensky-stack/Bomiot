@@ -7,11 +7,13 @@ WORKDIR /frontend
 COPY awesomewms/templates/package.json awesomewms/templates/yarn.lock ./
 
 # Use npmmirror (Taobao mirror) for faster installs in China
+# --ignore-scripts: quasar "prepare" postinstall needs project files not yet copied
 RUN yarn config set registry https://registry.npmmirror.com && \
-    yarn install --frozen-lockfile
+    yarn install --frozen-lockfile --ignore-scripts
 
 COPY awesomewms/templates/ .
-RUN yarn build
+# Re-run to execute postinstall scripts (quasar prepare) with full project present
+RUN yarn install --frozen-lockfile && yarn build
 
 # =============================================
 # Stage 2: Production backend (China mirrors)

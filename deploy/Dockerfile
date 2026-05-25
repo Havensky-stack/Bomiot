@@ -5,10 +5,10 @@ FROM node:20-alpine AS frontend-builder
 
 WORKDIR /frontend
 COPY awesomewms/templates/package.json awesomewms/templates/yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --ignore-scripts
 
 COPY awesomewms/templates/ .
-RUN yarn build
+RUN yarn install --frozen-lockfile && yarn build
 
 # =============================================
 # Stage 2: Production backend
