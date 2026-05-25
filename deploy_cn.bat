@@ -24,7 +24,7 @@ if /I "%CMD%"=="up" (
         exit /b 1
     )
     echo.
-    echo 部署完成! 访问 http://localhost
+    echo 部署完成! 访问 http://localhost:8000
     echo 查看日志: deploy_cn.bat logs
     goto :eof
 )

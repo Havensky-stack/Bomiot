@@ -56,7 +56,7 @@ case "${1:-up}" in
         }
         echo ""
         echo -e "${GREEN}部署完成!${NC}"
-        echo "访问地址: http://localhost:${PORT:-80}"
+        echo "访问地址: http://localhost:${PORT:-8000}"
         echo "查看日志: bash deploy_cn.sh logs"
         ;;
     down)
