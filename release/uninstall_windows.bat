@@ -1,5 +1,4 @@
-@echo off
-chcp 65001 >nul
+﻿@echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
@@ -16,7 +15,7 @@ cd /d "%PROJECT_DIR%"
 for %%F in ("deploy\docker-compose.cn.yml" "deploy\docker-compose.yml") do (
     if exist %%F (
         echo 正在停止 Docker 容器...
-        docker compose -f %%F down -v 2>nul
+        docker compose -f %%F down -v 2>/dev/null
         goto :remove_files
     )
 )
@@ -60,7 +59,7 @@ echo.
 
 REM --- WSL ---
 :check_wsl
-wsl --status >nul 2>&1
+wsl --status >/dev/null 2>&1
 if %errorlevel% neq 0 goto :done
 
 echo 是否卸载 WSL - Windows Subsystem for Linux？
@@ -75,8 +74,8 @@ if !errorlevel! equ 2 (
 
 echo.
 echo 正在删除 WSL 发行版...
-wsl --unregister docker-desktop-data 2>nul
-wsl --unregister docker-desktop 2>nul
+wsl --unregister docker-desktop-data 2>/dev/null
+wsl --unregister docker-desktop 2>/dev/null
 echo [完成] WSL 发行版已删除
 echo.
 echo 如需完全移除 WSL，请在 PowerShell 中以管理员身份运行：

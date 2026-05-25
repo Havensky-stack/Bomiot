@@ -1,5 +1,4 @@
-@echo off
-chcp 65001 >nul
+﻿@echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
@@ -11,10 +10,10 @@ echo   Awesome WMS - Windows 一键部署
 echo.
 
 REM --- 检查 Docker Desktop ---
-where docker >nul 2>&1
+where docker >/dev/null 2>&1
 if %errorlevel% neq 0 goto :docker_missing
 
-docker info >nul 2>&1
+docker info >/dev/null 2>&1
 if %errorlevel% neq 0 goto :docker_not_running
 
 echo [正常] Docker Desktop 已安装并运行中
@@ -31,7 +30,7 @@ echo [提示] Docker Desktop 未安装。
 echo.
 
 REM --- 检查 WSL ---
-wsl --status >nul 2>&1
+wsl --status >/dev/null 2>&1
 if %errorlevel% equ 0 goto :wsl_ok
 
 echo [提示] WSL 未安装 - Docker Desktop 依赖 WSL2。
@@ -68,7 +67,7 @@ REM --- 检测网络环境 ---
 :detect_cn
 echo.
 echo 正在检测网络环境...
-curl.exe -s --connect-timeout 3 https://registry-1.docker.io/v2/ >nul 2>&1
+curl.exe -s --connect-timeout 3 https://registry-1.docker.io/v2/ >/dev/null 2>&1
 if %errorlevel% equ 0 (
     echo [正常] Docker Hub 可访问 - 使用国际镜像源
     set COMPOSE_FILE=deploy/docker-compose.yml
