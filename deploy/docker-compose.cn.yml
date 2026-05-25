@@ -17,8 +17,6 @@
 #
 # 然后运行: bash deploy_cn.sh up
 # =============================================
-version: '3.8'
-
 services:
   db:
     image: mysql:8.0
