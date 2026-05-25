@@ -10,45 +10,47 @@ echo.
 echo   Awesome WMS - Windows 一键部署
 echo.
 
+REM --- 检查 Docker Desktop ---
 where docker >nul 2>&1
-if %errorlevel% equ 0 (
-    docker info >nul 2>&1
-    if !errorlevel! equ 0 (
-        echo [正常] Docker Desktop 已安装并运行中
-        goto :detect_cn
-    )
-    echo [提示] Docker Desktop 已安装但未启动。
-    echo        请从开始菜单启动 Docker Desktop，然后重新运行此脚本。
-    pause
-    exit /b 1
-)
+if %errorlevel% neq 0 goto :docker_missing
 
+docker info >nul 2>&1
+if %errorlevel% neq 0 goto :docker_not_running
+
+echo [正常] Docker Desktop 已安装并运行中
+goto :detect_cn
+
+:docker_not_running
+echo [提示] Docker Desktop 已安装但未启动。
+echo        请从开始菜单启动 Docker Desktop，然后重新运行此脚本。
+pause
+exit /b 1
+
+:docker_missing
 echo [提示] Docker Desktop 未安装。
 echo.
 
-set WSL_OK=0
+REM --- 检查 WSL ---
 wsl --status >nul 2>&1
-if %errorlevel% equ 0 (
-    set WSL_OK=1
-    echo [正常] WSL 已安装
-) else (
-    echo [提示] WSL 未安装 - Docker Desktop 依赖 WSL2。
-    echo.
-    echo         是否现在安装 WSL？需要管理员权限，安装后需重启电脑。
-    echo         [Y] 是，安装 WSL
-    echo         [N] 否，我自己安装
-    choice /c YN /n
-    if !errorlevel! equ 2 goto :manual_install
-    if !errorlevel! equ 1 (
-        echo.
-        echo 正在安装 WSL - 可能需要几分钟...
-        wsl --install
-        echo.
-        echo WSL 安装已启动。请重启电脑后重新运行此脚本。
-        pause
-        exit /b 0
-    )
-)
+if %errorlevel% equ 0 goto :wsl_ok
+
+echo [提示] WSL 未安装 - Docker Desktop 依赖 WSL2。
+echo.
+echo         是否现在安装 WSL？需要管理员权限，安装后需重启电脑。
+echo         [Y] 是，安装 WSL
+echo         [N] 否，我自己安装
+choice /c YN /n
+if !errorlevel! equ 2 goto :manual_install
+echo.
+echo 正在安装 WSL - 可能需要几分钟...
+wsl --install
+echo.
+echo WSL 安装已启动。请重启电脑后重新运行此脚本。
+pause
+exit /b 0
+
+:wsl_ok
+echo [正常] WSL 已安装
 
 :manual_install
 echo.
@@ -62,6 +64,7 @@ echo 完成后重新运行此脚本。
 pause
 exit /b 1
 
+REM --- 检测网络环境 ---
 :detect_cn
 echo.
 echo 正在检测网络环境...
@@ -74,22 +77,23 @@ if %errorlevel% equ 0 (
     set COMPOSE_FILE=deploy/docker-compose.cn.yml
 )
 
-if exist "%PROJECT_DIR%" (
-    echo.
-    echo 项目目录已存在: %PROJECT_DIR%
-    echo   [1] 更新 - git pull
-    echo   [2] 删除并重新克隆
-    echo   [3] 跳过克隆，直接启动
-    choice /c 123 /n /m "请选择 [1]: "
-    if !errorlevel! equ 3 goto :start_compose
-    if !errorlevel! equ 2 (
-        rmdir /s /q "%PROJECT_DIR%"
-        goto :clone
-    )
-    cd /d "%PROJECT_DIR%"
-    git pull
-    goto :start_compose
+REM --- 克隆/更新项目 ---
+if not exist "%PROJECT_DIR%" goto :clone
+
+echo.
+echo 项目目录已存在: %PROJECT_DIR%
+echo   [1] 更新 - git pull
+echo   [2] 删除并重新克隆
+echo   [3] 跳过克隆，直接启动
+choice /c 123 /n /m "请选择 [1]: "
+if !errorlevel! equ 3 goto :start_compose
+if !errorlevel! equ 2 (
+    rmdir /s /q "%PROJECT_DIR%"
+    goto :clone
 )
+cd /d "%PROJECT_DIR%"
+git pull
+goto :start_compose
 
 :clone
 echo.
@@ -102,6 +106,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+REM --- 启动服务 ---
 :start_compose
 cd /d "%PROJECT_DIR%"
 

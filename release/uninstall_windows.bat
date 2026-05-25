@@ -9,45 +9,43 @@ echo.
 echo   Awesome WMS - Windows 一键卸载
 echo.
 
-if exist "%PROJECT_DIR%" (
-    cd /d "%PROJECT_DIR%"
+REM --- 停止 Docker 容器 ---
+if not exist "%PROJECT_DIR%" goto :no_project
 
-    for %%F in ("deploy\docker-compose.cn.yml" "deploy\docker-compose.yml") do (
-        if exist %%F (
-            echo 正在停止 Docker 容器...
-            docker compose -f %%F down -v 2>nul
-            goto :remove_files
-        )
+cd /d "%PROJECT_DIR%"
+for %%F in ("deploy\docker-compose.cn.yml" "deploy\docker-compose.yml") do (
+    if exist %%F (
+        echo 正在停止 Docker 容器...
+        docker compose -f %%F down -v 2>nul
+        goto :remove_files
     )
 )
 
+:no_project
+echo [提示] 项目目录不存在: %PROJECT_DIR%
+goto :ask_docker
+
+REM --- 删除项目文件 ---
 :remove_files
 echo.
-
-if exist "%PROJECT_DIR%" (
-    echo 即将删除: %PROJECT_DIR%
-    choice /c YN /n /m "确认删除？[Y/N]: "
-    if !errorlevel! equ 2 (
-        echo 已跳过删除项目文件
-    ) else (
-        rmdir /s /q "%PROJECT_DIR%"
-        echo [完成] 项目文件已删除
-    )
+echo 即将删除: %PROJECT_DIR%
+choice /c YN /n /m "确认删除？[Y/N]: "
+if !errorlevel! equ 2 (
+    echo 已跳过删除项目文件
 ) else (
-    echo [提示] 项目目录不存在: %PROJECT_DIR%
+    rmdir /s /q "%PROJECT_DIR%"
+    echo [完成] 项目文件已删除
 )
 
+REM --- Docker Desktop ---
+:ask_docker
 echo.
-
 echo 是否卸载 Docker Desktop？
 echo   需要从 Windows 设置中手动卸载。
 echo   Docker 数据不会自动删除。
 echo.
 choice /c YN /n /m "准备卸载？[Y/N]: "
-if !errorlevel! equ 2 (
-    echo 已跳过卸载 Docker Desktop
-    goto :check_wsl
-)
+if !errorlevel! equ 2 goto :check_wsl
 
 echo.
 echo 手动卸载 Docker Desktop 步骤：
@@ -60,6 +58,7 @@ echo   %%APPDATA%%\Docker
 echo   %%LOCALAPPDATA%%\Docker
 echo.
 
+REM --- WSL ---
 :check_wsl
 wsl --status >nul 2>&1
 if %errorlevel% neq 0 goto :done
