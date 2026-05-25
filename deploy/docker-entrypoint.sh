@@ -50,7 +50,15 @@ INIEOF
 if [ "${DB_ENGINE:-mysql}" = "mysql" ]; then
     echo "Waiting for MySQL at ${DB_HOST:-db}:${DB_PORT:-3306}..."
     for i in $(seq 1 30); do
-        if mysqladmin ping -h"${DB_HOST:-db}" -P"${DB_PORT:-3306}" -u"${DB_USER:-root}" -p"${DB_PASSWORD:-root123}" --silent 2>/dev/null; then
+        if python -c "
+import MySQLdb
+try:
+    c = MySQLdb.connect(host='${DB_HOST:-db}', port=${DB_PORT:-3306}, user='${DB_USER:-root}', passwd='${DB_PASSWORD:-root123}')
+    c.close()
+    exit(0)
+except:
+    exit(1)
+" 2>/dev/null; then
             echo "MySQL ready."
             break
         fi
