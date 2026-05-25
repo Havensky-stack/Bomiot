@@ -52,7 +52,7 @@ if !errorlevel! equ 2 (
 echo.
 echo To manually uninstall Docker Desktop:
 echo   1. Open Windows Settings - Apps - Installed apps
-echo   2. Search "Docker Desktop" and click Uninstall
+echo   2. Search Docker Desktop and click Uninstall
 echo.
 echo Also delete these folders if they exist:
 echo   %%USERPROFILE%%\.docker
@@ -64,10 +64,10 @@ echo.
 wsl --status >nul 2>&1
 if %errorlevel% neq 0 goto :done
 
-echo Uninstall WSL (Windows Subsystem for Linux)?
+echo Uninstall WSL - Windows Subsystem for Linux?
 echo   This will remove all WSL distros and data.
 echo   [Y] Yes, uninstall WSL
-echo   [N] No, keep WSL (other apps may depend on it)
+echo   [N] No, keep WSL - other apps may depend on it
 choice /c YN /n
 if !errorlevel! equ 2 (
     echo Skipped WSL uninstall

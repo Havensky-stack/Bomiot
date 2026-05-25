@@ -32,7 +32,7 @@ if %errorlevel% equ 0 (
     set WSL_OK=1
     echo [OK] WSL is installed
 ) else (
-    echo [!] WSL is not installed (required by Docker Desktop).
+    echo [!] WSL is not installed - required by Docker Desktop.
     echo.
     echo     Install WSL now? Requires admin privileges and a reboot.
     echo     [Y] Yes, install WSL
@@ -41,7 +41,7 @@ if %errorlevel% equ 0 (
     if !errorlevel! equ 2 goto :manual_install
     if !errorlevel! equ 1 (
         echo.
-        echo Installing WSL (may take several minutes)...
+        echo Installing WSL - may take several minutes...
         wsl --install
         echo.
         echo WSL installation started. Please REBOOT, then re-run this script.
@@ -77,7 +77,7 @@ if %errorlevel% equ 0 (
 if exist "%PROJECT_DIR%" (
     echo.
     echo Project directory exists: %PROJECT_DIR%
-    echo   [1] Update (git pull^)
+    echo   [1] Update - git pull
     echo   [2] Remove and re-clone
     echo   [3] Skip clone, just start
     choice /c 123 /n /m "Choice [1]: "
@@ -105,7 +105,7 @@ if %errorlevel% neq 0 (
 cd /d "%PROJECT_DIR%"
 
 echo.
-echo Starting services (compose: %COMPOSE_FILE%)...
+echo Starting services - compose: %COMPOSE_FILE%...
 docker compose -f "%COMPOSE_FILE%" up -d --build
 if %errorlevel% neq 0 (
     echo.
